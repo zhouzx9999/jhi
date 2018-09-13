@@ -9,6 +9,14 @@ import { JhiEmployeeMySuffixModule } from './employee-my-suffix/employee-my-suff
 import { JhiJobMySuffixModule } from './job-my-suffix/job-my-suffix.module';
 import { JhiJobHistoryMySuffixModule } from './job-history-my-suffix/job-history-my-suffix.module';
 import { JhiZEntityModule } from './z-entity/z-entity.module';
+import { JhiRegionModule } from './region/region.module';
+import { JhiCountryModule } from './country/country.module';
+import { JhiLocationModule } from './location/location.module';
+import { JhiDepartmentModule } from './department/department.module';
+import { JhiTaskModule } from './task/task.module';
+import { JhiEmployeeModule } from './employee/employee.module';
+import { JhiJobModule } from './job/job.module';
+import { JhiJobHistoryModule } from './job-history/job-history.module';
 /* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
 
 @NgModule({
@@ -23,6 +31,14 @@ import { JhiZEntityModule } from './z-entity/z-entity.module';
         JhiJobMySuffixModule,
         JhiJobHistoryMySuffixModule,
         JhiZEntityModule,
+        JhiRegionModule,
+        JhiCountryModule,
+        JhiLocationModule,
+        JhiDepartmentModule,
+        JhiTaskModule,
+        JhiEmployeeModule,
+        JhiJobModule,
+        JhiJobHistoryModule,
         /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
     ],
     declarations: [],

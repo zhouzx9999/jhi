@@ -22,12 +22,11 @@
     "changelogDate": "20180910114236",
     "javadoc": "Task entity.\n@author The JHipster team.",
     "entityTableName": "task",
-    "dto": "no",
+    "dto": "mapstruct",
     "pagination": "no",
     "service": "serviceImpl",
     "jpaMetamodelFiltering": false,
     "fluentMethods": true,
     "clientRootFolder": "",
-    "applications": "*",
-    "angularJSSuffix": "mySuffix"
+    "applications": "*"
 }

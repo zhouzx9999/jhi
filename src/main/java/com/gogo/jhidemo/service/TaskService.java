@@ -1,6 +1,6 @@
 package com.gogo.jhidemo.service;
 
-import com.gogo.jhidemo.domain.Task;
+import com.gogo.jhidemo.service.dto.TaskDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,17 +13,17 @@ public interface TaskService {
     /**
      * Save a task.
      *
-     * @param task the entity to save
+     * @param taskDTO the entity to save
      * @return the persisted entity
      */
-    Task save(Task task);
+    TaskDTO save(TaskDTO taskDTO);
 
     /**
      * Get all the tasks.
      *
      * @return the list of entities
      */
-    List<Task> findAll();
+    List<TaskDTO> findAll();
 
 
     /**
@@ -32,7 +32,7 @@ public interface TaskService {
      * @param id the id of the entity
      * @return the entity
      */
-    Optional<Task> findOne(Long id);
+    Optional<TaskDTO> findOne(Long id);
 
     /**
      * Delete the "id" task.

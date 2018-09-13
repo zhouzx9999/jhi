@@ -4,6 +4,9 @@ import com.gogo.jhidemo.JhiApp;
 
 import com.gogo.jhidemo.domain.Job;
 import com.gogo.jhidemo.repository.JobRepository;
+import com.gogo.jhidemo.service.JobService;
+import com.gogo.jhidemo.service.dto.JobDTO;
+import com.gogo.jhidemo.service.mapper.JobMapper;
 import com.gogo.jhidemo.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -60,6 +63,16 @@ public class JobResourceIntTest {
     private JobRepository jobRepositoryMock;
 
     @Autowired
+    private JobMapper jobMapper;
+    
+
+    @Mock
+    private JobService jobServiceMock;
+
+    @Autowired
+    private JobService jobService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -78,7 +91,7 @@ public class JobResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final JobResource jobResource = new JobResource(jobRepository);
+        final JobResource jobResource = new JobResource(jobService);
         this.restJobMockMvc = MockMvcBuilders.standaloneSetup(jobResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -111,9 +124,10 @@ public class JobResourceIntTest {
         int databaseSizeBeforeCreate = jobRepository.findAll().size();
 
         // Create the Job
+        JobDTO jobDTO = jobMapper.toDto(job);
         restJobMockMvc.perform(post("/api/jobs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(job)))
+            .content(TestUtil.convertObjectToJsonBytes(jobDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Job in the database
@@ -132,11 +146,12 @@ public class JobResourceIntTest {
 
         // Create the Job with an existing ID
         job.setId(1L);
+        JobDTO jobDTO = jobMapper.toDto(job);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restJobMockMvc.perform(post("/api/jobs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(job)))
+            .content(TestUtil.convertObjectToJsonBytes(jobDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Job in the database
@@ -161,8 +176,8 @@ public class JobResourceIntTest {
     }
     
     public void getAllJobsWithEagerRelationshipsIsEnabled() throws Exception {
-        JobResource jobResource = new JobResource(jobRepositoryMock);
-        when(jobRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        JobResource jobResource = new JobResource(jobServiceMock);
+        when(jobServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restJobMockMvc = MockMvcBuilders.standaloneSetup(jobResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -173,12 +188,12 @@ public class JobResourceIntTest {
         restJobMockMvc.perform(get("/api/jobs?eagerload=true"))
         .andExpect(status().isOk());
 
-        verify(jobRepositoryMock, times(1)).findAllWithEagerRelationships(any());
+        verify(jobServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     public void getAllJobsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        JobResource jobResource = new JobResource(jobRepositoryMock);
-            when(jobRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        JobResource jobResource = new JobResource(jobServiceMock);
+            when(jobServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
             MockMvc restJobMockMvc = MockMvcBuilders.standaloneSetup(jobResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -188,7 +203,7 @@ public class JobResourceIntTest {
         restJobMockMvc.perform(get("/api/jobs?eagerload=true"))
         .andExpect(status().isOk());
 
-            verify(jobRepositoryMock, times(1)).findAllWithEagerRelationships(any());
+            verify(jobServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -231,10 +246,11 @@ public class JobResourceIntTest {
             .jobTitle(UPDATED_JOB_TITLE)
             .minSalary(UPDATED_MIN_SALARY)
             .maxSalary(UPDATED_MAX_SALARY);
+        JobDTO jobDTO = jobMapper.toDto(updatedJob);
 
         restJobMockMvc.perform(put("/api/jobs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedJob)))
+            .content(TestUtil.convertObjectToJsonBytes(jobDTO)))
             .andExpect(status().isOk());
 
         // Validate the Job in the database
@@ -252,11 +268,12 @@ public class JobResourceIntTest {
         int databaseSizeBeforeUpdate = jobRepository.findAll().size();
 
         // Create the Job
+        JobDTO jobDTO = jobMapper.toDto(job);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restJobMockMvc.perform(put("/api/jobs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(job)))
+            .content(TestUtil.convertObjectToJsonBytes(jobDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Job in the database
@@ -295,5 +312,28 @@ public class JobResourceIntTest {
         assertThat(job1).isNotEqualTo(job2);
         job1.setId(null);
         assertThat(job1).isNotEqualTo(job2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(JobDTO.class);
+        JobDTO jobDTO1 = new JobDTO();
+        jobDTO1.setId(1L);
+        JobDTO jobDTO2 = new JobDTO();
+        assertThat(jobDTO1).isNotEqualTo(jobDTO2);
+        jobDTO2.setId(jobDTO1.getId());
+        assertThat(jobDTO1).isEqualTo(jobDTO2);
+        jobDTO2.setId(2L);
+        assertThat(jobDTO1).isNotEqualTo(jobDTO2);
+        jobDTO1.setId(null);
+        assertThat(jobDTO1).isNotEqualTo(jobDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(jobMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(jobMapper.fromId(null)).isNull();
     }
 }

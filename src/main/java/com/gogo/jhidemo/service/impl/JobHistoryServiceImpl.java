@@ -3,6 +3,8 @@ package com.gogo.jhidemo.service.impl;
 import com.gogo.jhidemo.service.JobHistoryService;
 import com.gogo.jhidemo.domain.JobHistory;
 import com.gogo.jhidemo.repository.JobHistoryRepository;
+import com.gogo.jhidemo.service.dto.JobHistoryDTO;
+import com.gogo.jhidemo.service.mapper.JobHistoryMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,19 +26,25 @@ public class JobHistoryServiceImpl implements JobHistoryService {
 
     private final JobHistoryRepository jobHistoryRepository;
 
-    public JobHistoryServiceImpl(JobHistoryRepository jobHistoryRepository) {
+    private final JobHistoryMapper jobHistoryMapper;
+
+    public JobHistoryServiceImpl(JobHistoryRepository jobHistoryRepository, JobHistoryMapper jobHistoryMapper) {
         this.jobHistoryRepository = jobHistoryRepository;
+        this.jobHistoryMapper = jobHistoryMapper;
     }
 
     /**
      * Save a jobHistory.
      *
-     * @param jobHistory the entity to save
+     * @param jobHistoryDTO the entity to save
      * @return the persisted entity
      */
     @Override
-    public JobHistory save(JobHistory jobHistory) {
-        log.debug("Request to save JobHistory : {}", jobHistory);        return jobHistoryRepository.save(jobHistory);
+    public JobHistoryDTO save(JobHistoryDTO jobHistoryDTO) {
+        log.debug("Request to save JobHistory : {}", jobHistoryDTO);
+        JobHistory jobHistory = jobHistoryMapper.toEntity(jobHistoryDTO);
+        jobHistory = jobHistoryRepository.save(jobHistory);
+        return jobHistoryMapper.toDto(jobHistory);
     }
 
     /**
@@ -47,9 +55,10 @@ public class JobHistoryServiceImpl implements JobHistoryService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<JobHistory> findAll(Pageable pageable) {
+    public Page<JobHistoryDTO> findAll(Pageable pageable) {
         log.debug("Request to get all JobHistories");
-        return jobHistoryRepository.findAll(pageable);
+        return jobHistoryRepository.findAll(pageable)
+            .map(jobHistoryMapper::toDto);
     }
 
 
@@ -61,9 +70,10 @@ public class JobHistoryServiceImpl implements JobHistoryService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<JobHistory> findOne(Long id) {
+    public Optional<JobHistoryDTO> findOne(Long id) {
         log.debug("Request to get JobHistory : {}", id);
-        return jobHistoryRepository.findById(id);
+        return jobHistoryRepository.findById(id)
+            .map(jobHistoryMapper::toDto);
     }
 
     /**

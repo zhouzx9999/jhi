@@ -5,6 +5,8 @@ import com.gogo.jhidemo.JhiApp;
 import com.gogo.jhidemo.domain.JobHistory;
 import com.gogo.jhidemo.repository.JobHistoryRepository;
 import com.gogo.jhidemo.service.JobHistoryService;
+import com.gogo.jhidemo.service.dto.JobHistoryDTO;
+import com.gogo.jhidemo.service.mapper.JobHistoryMapper;
 import com.gogo.jhidemo.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -54,6 +56,9 @@ public class JobHistoryResourceIntTest {
 
     @Autowired
     private JobHistoryRepository jobHistoryRepository;
+
+    @Autowired
+    private JobHistoryMapper jobHistoryMapper;
     
     @Autowired
     private JobHistoryService jobHistoryService;
@@ -110,9 +115,10 @@ public class JobHistoryResourceIntTest {
         int databaseSizeBeforeCreate = jobHistoryRepository.findAll().size();
 
         // Create the JobHistory
+        JobHistoryDTO jobHistoryDTO = jobHistoryMapper.toDto(jobHistory);
         restJobHistoryMockMvc.perform(post("/api/job-histories")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(jobHistory)))
+            .content(TestUtil.convertObjectToJsonBytes(jobHistoryDTO)))
             .andExpect(status().isCreated());
 
         // Validate the JobHistory in the database
@@ -131,11 +137,12 @@ public class JobHistoryResourceIntTest {
 
         // Create the JobHistory with an existing ID
         jobHistory.setId(1L);
+        JobHistoryDTO jobHistoryDTO = jobHistoryMapper.toDto(jobHistory);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restJobHistoryMockMvc.perform(post("/api/job-histories")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(jobHistory)))
+            .content(TestUtil.convertObjectToJsonBytes(jobHistoryDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the JobHistory in the database
@@ -187,7 +194,7 @@ public class JobHistoryResourceIntTest {
     @Transactional
     public void updateJobHistory() throws Exception {
         // Initialize the database
-        jobHistoryService.save(jobHistory);
+        jobHistoryRepository.saveAndFlush(jobHistory);
 
         int databaseSizeBeforeUpdate = jobHistoryRepository.findAll().size();
 
@@ -199,10 +206,11 @@ public class JobHistoryResourceIntTest {
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
             .language(UPDATED_LANGUAGE);
+        JobHistoryDTO jobHistoryDTO = jobHistoryMapper.toDto(updatedJobHistory);
 
         restJobHistoryMockMvc.perform(put("/api/job-histories")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedJobHistory)))
+            .content(TestUtil.convertObjectToJsonBytes(jobHistoryDTO)))
             .andExpect(status().isOk());
 
         // Validate the JobHistory in the database
@@ -220,11 +228,12 @@ public class JobHistoryResourceIntTest {
         int databaseSizeBeforeUpdate = jobHistoryRepository.findAll().size();
 
         // Create the JobHistory
+        JobHistoryDTO jobHistoryDTO = jobHistoryMapper.toDto(jobHistory);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restJobHistoryMockMvc.perform(put("/api/job-histories")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(jobHistory)))
+            .content(TestUtil.convertObjectToJsonBytes(jobHistoryDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the JobHistory in the database
@@ -236,7 +245,7 @@ public class JobHistoryResourceIntTest {
     @Transactional
     public void deleteJobHistory() throws Exception {
         // Initialize the database
-        jobHistoryService.save(jobHistory);
+        jobHistoryRepository.saveAndFlush(jobHistory);
 
         int databaseSizeBeforeDelete = jobHistoryRepository.findAll().size();
 
@@ -263,5 +272,28 @@ public class JobHistoryResourceIntTest {
         assertThat(jobHistory1).isNotEqualTo(jobHistory2);
         jobHistory1.setId(null);
         assertThat(jobHistory1).isNotEqualTo(jobHistory2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(JobHistoryDTO.class);
+        JobHistoryDTO jobHistoryDTO1 = new JobHistoryDTO();
+        jobHistoryDTO1.setId(1L);
+        JobHistoryDTO jobHistoryDTO2 = new JobHistoryDTO();
+        assertThat(jobHistoryDTO1).isNotEqualTo(jobHistoryDTO2);
+        jobHistoryDTO2.setId(jobHistoryDTO1.getId());
+        assertThat(jobHistoryDTO1).isEqualTo(jobHistoryDTO2);
+        jobHistoryDTO2.setId(2L);
+        assertThat(jobHistoryDTO1).isNotEqualTo(jobHistoryDTO2);
+        jobHistoryDTO1.setId(null);
+        assertThat(jobHistoryDTO1).isNotEqualTo(jobHistoryDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(jobHistoryMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(jobHistoryMapper.fromId(null)).isNull();
     }
 }

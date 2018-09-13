@@ -5,6 +5,8 @@ import com.gogo.jhidemo.JhiApp;
 import com.gogo.jhidemo.domain.Region;
 import com.gogo.jhidemo.repository.RegionRepository;
 import com.gogo.jhidemo.service.RegionService;
+import com.gogo.jhidemo.service.dto.RegionDTO;
+import com.gogo.jhidemo.service.mapper.RegionMapper;
 import com.gogo.jhidemo.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -45,6 +47,9 @@ public class RegionResourceIntTest {
 
     @Autowired
     private RegionRepository regionRepository;
+
+    @Autowired
+    private RegionMapper regionMapper;
     
     @Autowired
     private RegionService regionService;
@@ -99,9 +104,10 @@ public class RegionResourceIntTest {
         int databaseSizeBeforeCreate = regionRepository.findAll().size();
 
         // Create the Region
+        RegionDTO regionDTO = regionMapper.toDto(region);
         restRegionMockMvc.perform(post("/api/regions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(region)))
+            .content(TestUtil.convertObjectToJsonBytes(regionDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Region in the database
@@ -118,11 +124,12 @@ public class RegionResourceIntTest {
 
         // Create the Region with an existing ID
         region.setId(1L);
+        RegionDTO regionDTO = regionMapper.toDto(region);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restRegionMockMvc.perform(post("/api/regions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(region)))
+            .content(TestUtil.convertObjectToJsonBytes(regionDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Region in the database
@@ -170,7 +177,7 @@ public class RegionResourceIntTest {
     @Transactional
     public void updateRegion() throws Exception {
         // Initialize the database
-        regionService.save(region);
+        regionRepository.saveAndFlush(region);
 
         int databaseSizeBeforeUpdate = regionRepository.findAll().size();
 
@@ -180,10 +187,11 @@ public class RegionResourceIntTest {
         em.detach(updatedRegion);
         updatedRegion
             .regionName(UPDATED_REGION_NAME);
+        RegionDTO regionDTO = regionMapper.toDto(updatedRegion);
 
         restRegionMockMvc.perform(put("/api/regions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedRegion)))
+            .content(TestUtil.convertObjectToJsonBytes(regionDTO)))
             .andExpect(status().isOk());
 
         // Validate the Region in the database
@@ -199,11 +207,12 @@ public class RegionResourceIntTest {
         int databaseSizeBeforeUpdate = regionRepository.findAll().size();
 
         // Create the Region
+        RegionDTO regionDTO = regionMapper.toDto(region);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restRegionMockMvc.perform(put("/api/regions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(region)))
+            .content(TestUtil.convertObjectToJsonBytes(regionDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Region in the database
@@ -215,7 +224,7 @@ public class RegionResourceIntTest {
     @Transactional
     public void deleteRegion() throws Exception {
         // Initialize the database
-        regionService.save(region);
+        regionRepository.saveAndFlush(region);
 
         int databaseSizeBeforeDelete = regionRepository.findAll().size();
 
@@ -242,5 +251,28 @@ public class RegionResourceIntTest {
         assertThat(region1).isNotEqualTo(region2);
         region1.setId(null);
         assertThat(region1).isNotEqualTo(region2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(RegionDTO.class);
+        RegionDTO regionDTO1 = new RegionDTO();
+        regionDTO1.setId(1L);
+        RegionDTO regionDTO2 = new RegionDTO();
+        assertThat(regionDTO1).isNotEqualTo(regionDTO2);
+        regionDTO2.setId(regionDTO1.getId());
+        assertThat(regionDTO1).isEqualTo(regionDTO2);
+        regionDTO2.setId(2L);
+        assertThat(regionDTO1).isNotEqualTo(regionDTO2);
+        regionDTO1.setId(null);
+        assertThat(regionDTO1).isNotEqualTo(regionDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(regionMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(regionMapper.fromId(null)).isNull();
     }
 }

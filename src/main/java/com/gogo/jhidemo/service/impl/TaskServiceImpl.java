@@ -3,15 +3,18 @@ package com.gogo.jhidemo.service.impl;
 import com.gogo.jhidemo.service.TaskService;
 import com.gogo.jhidemo.domain.Task;
 import com.gogo.jhidemo.repository.TaskRepository;
+import com.gogo.jhidemo.service.dto.TaskDTO;
+import com.gogo.jhidemo.service.mapper.TaskMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 /**
  * Service Implementation for managing Task.
  */
@@ -23,19 +26,25 @@ public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
 
-    public TaskServiceImpl(TaskRepository taskRepository) {
+    private final TaskMapper taskMapper;
+
+    public TaskServiceImpl(TaskRepository taskRepository, TaskMapper taskMapper) {
         this.taskRepository = taskRepository;
+        this.taskMapper = taskMapper;
     }
 
     /**
      * Save a task.
      *
-     * @param task the entity to save
+     * @param taskDTO the entity to save
      * @return the persisted entity
      */
     @Override
-    public Task save(Task task) {
-        log.debug("Request to save Task : {}", task);        return taskRepository.save(task);
+    public TaskDTO save(TaskDTO taskDTO) {
+        log.debug("Request to save Task : {}", taskDTO);
+        Task task = taskMapper.toEntity(taskDTO);
+        task = taskRepository.save(task);
+        return taskMapper.toDto(task);
     }
 
     /**
@@ -45,9 +54,11 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<Task> findAll() {
+    public List<TaskDTO> findAll() {
         log.debug("Request to get all Tasks");
-        return taskRepository.findAll();
+        return taskRepository.findAll().stream()
+            .map(taskMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
     }
 
 
@@ -59,9 +70,10 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<Task> findOne(Long id) {
+    public Optional<TaskDTO> findOne(Long id) {
         log.debug("Request to get Task : {}", id);
-        return taskRepository.findById(id);
+        return taskRepository.findById(id)
+            .map(taskMapper::toDto);
     }
 
     /**

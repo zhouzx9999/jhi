@@ -1,6 +1,6 @@
 package com.gogo.jhidemo.service;
 
-import com.gogo.jhidemo.domain.Country;
+import com.gogo.jhidemo.service.dto.CountryDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,17 +13,17 @@ public interface CountryService {
     /**
      * Save a country.
      *
-     * @param country the entity to save
+     * @param countryDTO the entity to save
      * @return the persisted entity
      */
-    Country save(Country country);
+    CountryDTO save(CountryDTO countryDTO);
 
     /**
      * Get all the countries.
      *
      * @return the list of entities
      */
-    List<Country> findAll();
+    List<CountryDTO> findAll();
 
 
     /**
@@ -32,7 +32,7 @@ public interface CountryService {
      * @param id the id of the entity
      * @return the entity
      */
-    Optional<Country> findOne(Long id);
+    Optional<CountryDTO> findOne(Long id);
 
     /**
      * Delete the "id" country.

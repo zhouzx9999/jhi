@@ -3,15 +3,18 @@ package com.gogo.jhidemo.service.impl;
 import com.gogo.jhidemo.service.DepartmentService;
 import com.gogo.jhidemo.domain.Department;
 import com.gogo.jhidemo.repository.DepartmentRepository;
+import com.gogo.jhidemo.service.dto.DepartmentDTO;
+import com.gogo.jhidemo.service.mapper.DepartmentMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 /**
  * Service Implementation for managing Department.
  */
@@ -23,19 +26,25 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     private final DepartmentRepository departmentRepository;
 
-    public DepartmentServiceImpl(DepartmentRepository departmentRepository) {
+    private final DepartmentMapper departmentMapper;
+
+    public DepartmentServiceImpl(DepartmentRepository departmentRepository, DepartmentMapper departmentMapper) {
         this.departmentRepository = departmentRepository;
+        this.departmentMapper = departmentMapper;
     }
 
     /**
      * Save a department.
      *
-     * @param department the entity to save
+     * @param departmentDTO the entity to save
      * @return the persisted entity
      */
     @Override
-    public Department save(Department department) {
-        log.debug("Request to save Department : {}", department);        return departmentRepository.save(department);
+    public DepartmentDTO save(DepartmentDTO departmentDTO) {
+        log.debug("Request to save Department : {}", departmentDTO);
+        Department department = departmentMapper.toEntity(departmentDTO);
+        department = departmentRepository.save(department);
+        return departmentMapper.toDto(department);
     }
 
     /**
@@ -45,9 +54,11 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<Department> findAll() {
+    public List<DepartmentDTO> findAll() {
         log.debug("Request to get all Departments");
-        return departmentRepository.findAll();
+        return departmentRepository.findAll().stream()
+            .map(departmentMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
     }
 
 
@@ -59,9 +70,10 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<Department> findOne(Long id) {
+    public Optional<DepartmentDTO> findOne(Long id) {
         log.debug("Request to get Department : {}", id);
-        return departmentRepository.findById(id);
+        return departmentRepository.findById(id)
+            .map(departmentMapper::toDto);
     }
 
     /**

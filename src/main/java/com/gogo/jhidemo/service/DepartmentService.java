@@ -1,6 +1,6 @@
 package com.gogo.jhidemo.service;
 
-import com.gogo.jhidemo.domain.Department;
+import com.gogo.jhidemo.service.dto.DepartmentDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,17 +13,17 @@ public interface DepartmentService {
     /**
      * Save a department.
      *
-     * @param department the entity to save
+     * @param departmentDTO the entity to save
      * @return the persisted entity
      */
-    Department save(Department department);
+    DepartmentDTO save(DepartmentDTO departmentDTO);
 
     /**
      * Get all the departments.
      *
      * @return the list of entities
      */
-    List<Department> findAll();
+    List<DepartmentDTO> findAll();
 
 
     /**
@@ -32,7 +32,7 @@ public interface DepartmentService {
      * @param id the id of the entity
      * @return the entity
      */
-    Optional<Department> findOne(Long id);
+    Optional<DepartmentDTO> findOne(Long id);
 
     /**
      * Delete the "id" department.

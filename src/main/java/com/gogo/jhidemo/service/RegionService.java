@@ -1,6 +1,6 @@
 package com.gogo.jhidemo.service;
 
-import com.gogo.jhidemo.domain.Region;
+import com.gogo.jhidemo.service.dto.RegionDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,17 +13,17 @@ public interface RegionService {
     /**
      * Save a region.
      *
-     * @param region the entity to save
+     * @param regionDTO the entity to save
      * @return the persisted entity
      */
-    Region save(Region region);
+    RegionDTO save(RegionDTO regionDTO);
 
     /**
      * Get all the regions.
      *
      * @return the list of entities
      */
-    List<Region> findAll();
+    List<RegionDTO> findAll();
 
 
     /**
@@ -32,7 +32,7 @@ public interface RegionService {
      * @param id the id of the entity
      * @return the entity
      */
-    Optional<Region> findOne(Long id);
+    Optional<RegionDTO> findOne(Long id);
 
     /**
      * Delete the "id" region.
