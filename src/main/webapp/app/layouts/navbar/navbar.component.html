@@ -77,6 +77,12 @@
                             <span jhiTranslate="global.menu.entities.jobHistoryMySuffix">Job History My Suffix</span>
                         </a>
                     </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="z-entity" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
+                            <span jhiTranslate="global.menu.entities.zEntity">Z Entity</span>
+                        </a>
+                    </li>
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </ul>
             </li>

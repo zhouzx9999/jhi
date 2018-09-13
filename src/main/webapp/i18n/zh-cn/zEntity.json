@@ -1,0 +1,27 @@
+
+{
+    "jhiApp": {
+        "zEntity" : {
+            "home": {
+                "title": "Z Entities",
+                "createLabel": "创建新 Z Entity",
+                "createOrEditLabel": "创建或编辑 Z Entity"
+            },
+            "created": "Z Entity {{ param }} 创建成功",
+            "updated": "Z Entity {{ param }} 更新成功",
+            "deleted": "Z Entity {{ param }} 删除成功",
+            "delete": {
+                "question": "你确定要删除 Z Entity {{ id }} 吗？"
+            },
+            "detail": {
+                "title": "Z Entity"
+            },
+            "entityName": "Entity Name",
+            "entityAbbre": "Entity Abbre",
+            "entityStdName": "Entity Std Name",
+            "entityType": "Entity Type",
+            "isGuiKou": "Is Gui Kou",
+            "creater": "Creater"
+        }
+    }
+}

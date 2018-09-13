@@ -15,6 +15,7 @@
                 "employeeMySuffix": "Employee",
                 "jobMySuffix": "Job",
                 "jobHistoryMySuffix": "Job History",
+                "zEntity": "Z Entity",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
