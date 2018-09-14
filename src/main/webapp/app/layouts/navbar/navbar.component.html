@@ -19,7 +19,7 @@
                 </a>
             </li>
             <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
-            <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <li *jhiHasAnyAuthority="'ROLE_USER'" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
                     <span>
                         <fa-icon [icon]="'th-list'"></fa-icon>
@@ -28,7 +28,7 @@
                         </span>
                     </span>
                 </a>
-
+                <ul>
                     <li>
                         <a class="dropdown-item" routerLink="region" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
@@ -59,6 +59,7 @@
                             <span jhiTranslate="global.menu.entities.task">Task</span>
                         </a>
                     </li>
+                    
                     <li>
                         <a class="dropdown-item" routerLink="employee" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
