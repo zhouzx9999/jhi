@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-=======
-
-
->>>>>>> jhipster_upgrade
 {
   "name": "jhi",
   "version": "0.0.0",
@@ -78,11 +73,7 @@
     "mocha": "5.2.0",
     "mini-css-extract-plugin": "0.4.2",
     "moment-locales-webpack-plugin": "1.0.5",
-<<<<<<< HEAD
-    "postcss-loader": "2.1.1",
-=======
     "optimize-css-assets-webpack-plugin": "5.0.1",
->>>>>>> jhipster_upgrade
     "prettier": "1.11.1",
     "protractor": "5.4.0",
     "proxy-middleware": "0.15.0",

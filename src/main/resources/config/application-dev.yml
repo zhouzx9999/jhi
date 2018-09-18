@@ -67,18 +67,6 @@ spring:
     thymeleaf:
         cache: false
 
-<<<<<<< HEAD
-# ===================================================================
-# To enable SSL in development, uncomment the the "server.ssl" properties below.
-#来吧
-# JHipster has generated a self-signed certificate, which will be used to encrypt traffic.
-# As your browser will not understand this certificate, you will need to import it.
-#
-# Another (easiest) solution with Chrome is to enable the "allow-insecure-localhost" flag
-# at chrome://flags/#allow-insecure-localhost
-# ===================================================================
-=======
->>>>>>> jhipster_upgrade
 server:
     port: 8080
 
