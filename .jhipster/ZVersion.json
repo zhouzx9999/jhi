@@ -1,0 +1,35 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "versionType",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "accessType",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "inUse",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dateInUse",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "accessType1",
+            "fieldType": "Zenumer",
+            "fieldValues": "COST"
+        }
+    ],
+    "changelogDate": "20180916032309",
+    "dto": "no",
+    "searchEngine": false,
+    "service": "no",
+    "entityTableName": "zversion",
+    "jpaMetamodelFiltering": false,
+    "pagination": "no"
+}

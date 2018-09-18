@@ -1,0 +1,55 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-z-version-heading" jhiTranslate="jhiApp.zVersion.home.createOrEditLabel">Create or edit a Z Version</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!zVersion.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="zVersion.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jhiApp.zVersion.versionType" for="field_versionType">Version Type</label>
+                    <input type="number" class="form-control" name="versionType" id="field_versionType"
+                        [(ngModel)]="zVersion.versionType" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jhiApp.zVersion.accessType" for="field_accessType">Access Type</label>
+                    <input type="number" class="form-control" name="accessType" id="field_accessType"
+                        [(ngModel)]="zVersion.accessType" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jhiApp.zVersion.inUse" for="field_inUse">In Use</label>
+                    <input type="number" class="form-control" name="inUse" id="field_inUse"
+                        [(ngModel)]="zVersion.inUse" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jhiApp.zVersion.dateInUse" for="field_dateInUse">Date In Use</label>
+                    <div class="input-group">
+                        <input id="field_dateInUse" type="text" class="form-control" name="dateInUse" ngbDatepicker  #dateInUseDp="ngbDatepicker" [(ngModel)]="zVersion.dateInUse"
+                        />
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="dateInUseDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jhiApp.zVersion.accessType1" for="field_accessType1">Access Type 1</label>
+                    <select class="form-control" name="accessType1" [(ngModel)]="zVersion.accessType1" id="field_accessType1" >
+                        <option value="COST">{{'jhiApp.Zenumer.COST' | translate}}</option>
+                    </select>
+                </div>
+
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

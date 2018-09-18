@@ -1,0 +1,46 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "creater",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "login",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "zEntity"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "entityName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "entityAbbre",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "entityStdName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "entityType",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "isGuiKou",
+            "fieldType": "Integer"
+        }
+    ],
+    "changelogDate": "20180913092715",
+    "dto": "mapstruct",
+    "searchEngine": false,
+    "service": "serviceClass",
+    "entityTableName": "zentity",
+    "jpaMetamodelFiltering": false,
+    "pagination": "infinite-scroll"
+}

@@ -1,0 +1,21 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "typeName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20180916031043",
+    "dto": "no",
+    "searchEngine": false,
+    "service": "no",
+    "entityTableName": "zplan_type",
+    "jpaMetamodelFiltering": false,
+    "pagination": "no"
+}

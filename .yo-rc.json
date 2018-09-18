@@ -1,0 +1,40 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.gogo.jhidemo",
+      "nativeLanguage": "zh-cn"
+    },
+    "jhipsterVersion": "5.3.1",
+    "applicationType": "monolith",
+    "baseName": "jhi",
+    "packageName": "com.gogo.jhidemo",
+    "packageFolder": "com/gogo/jhidemo",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "no",
+    "websocket": "spring-websocket",
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "OTBlMjU0ZTZiZmE4NTE4NzVhMDM3YTI0NDFlZjE2ZWJlNmU0ZjkxZDA2ODJhODg5NjAwZWI1NTYwZThjM2U2ZjE0N2M3NDY3M2RmMGI0ZjU4YzdlY2FmNTk3NTA4MzE0ODE1Y2RlMTg1NTBlNmMwMDYwMTdlNmFiYjNjOGJhMDE=",
+    "clientFramework": "angularX",
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "testFrameworks": [
+      "gatling",
+      "cucumber",
+      "protractor"
+    ],
+    "jhiPrefix": "jhi",
+    "enableTranslation": true,
+    "nativeLanguage": "zh-cn",
+    "languages": [
+      "zh-cn"
+    ]
+  }
+}
