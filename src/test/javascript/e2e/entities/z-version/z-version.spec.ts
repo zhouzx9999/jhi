@@ -1,7 +1,10 @@
+/* tslint:disable no-unused-expression */
 import { browser, ExpectedConditions as ec } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { ZVersionComponentsPage, ZVersionDeleteDialog, ZVersionUpdatePage } from './z-version.page-object';
+
+const expect = chai.expect;
 
 describe('ZVersion e2e test', () => {
     let navBarPage: NavBarPage;
@@ -10,7 +13,7 @@ describe('ZVersion e2e test', () => {
     let zVersionComponentsPage: ZVersionComponentsPage;
     let zVersionDeleteDialog: ZVersionDeleteDialog;
 
-    beforeAll(async () => {
+    before(async () => {
         await browser.get('/');
         navBarPage = new NavBarPage();
         signInPage = await navBarPage.getSignInPage();
@@ -21,29 +24,33 @@ describe('ZVersion e2e test', () => {
     it('should load ZVersions', async () => {
         await navBarPage.goToEntity('z-version');
         zVersionComponentsPage = new ZVersionComponentsPage();
-        expect(await zVersionComponentsPage.getTitle()).toMatch(/jhiApp.zVersion.home.title/);
+        expect(await zVersionComponentsPage.getTitle()).to.eq('jhiApp.zVersion.home.title');
     });
 
     it('should load create ZVersion page', async () => {
         await zVersionComponentsPage.clickOnCreateButton();
         zVersionUpdatePage = new ZVersionUpdatePage();
-        expect(await zVersionUpdatePage.getPageTitle()).toMatch(/jhiApp.zVersion.home.createOrEditLabel/);
+        expect(await zVersionUpdatePage.getPageTitle()).to.eq('jhiApp.zVersion.home.createOrEditLabel');
         await zVersionUpdatePage.cancel();
     });
 
     it('should create and save ZVersions', async () => {
+        const nbButtonsBeforeCreate = await zVersionComponentsPage.countDeleteButtons();
+
         await zVersionComponentsPage.clickOnCreateButton();
         await zVersionUpdatePage.setVersionTypeInput('5');
-        expect(await zVersionUpdatePage.getVersionTypeInput()).toMatch('5');
+        expect(await zVersionUpdatePage.getVersionTypeInput()).to.eq('5');
         await zVersionUpdatePage.setAccessTypeInput('5');
-        expect(await zVersionUpdatePage.getAccessTypeInput()).toMatch('5');
+        expect(await zVersionUpdatePage.getAccessTypeInput()).to.eq('5');
         await zVersionUpdatePage.setInUseInput('5');
-        expect(await zVersionUpdatePage.getInUseInput()).toMatch('5');
+        expect(await zVersionUpdatePage.getInUseInput()).to.eq('5');
         await zVersionUpdatePage.setDateInUseInput('2000-12-31');
-        expect(await zVersionUpdatePage.getDateInUseInput()).toMatch('2000-12-31');
+        expect(await zVersionUpdatePage.getDateInUseInput()).to.eq('2000-12-31');
         await zVersionUpdatePage.accessType1SelectLastOption();
         await zVersionUpdatePage.save();
-        expect(await zVersionUpdatePage.getSaveButton().isPresent()).toBeFalsy();
+        expect(await zVersionUpdatePage.getSaveButton().isPresent()).to.be.false;
+
+        expect(await zVersionComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1);
     });
 
     it('should delete last ZVersion', async () => {
@@ -51,13 +58,13 @@ describe('ZVersion e2e test', () => {
         await zVersionComponentsPage.clickOnLastDeleteButton();
 
         zVersionDeleteDialog = new ZVersionDeleteDialog();
-        expect(await zVersionDeleteDialog.getDialogTitle()).toMatch(/jhiApp.zVersion.delete.question/);
+        expect(await zVersionDeleteDialog.getDialogTitle()).to.eq('jhiApp.zVersion.delete.question');
         await zVersionDeleteDialog.clickOnConfirmButton();
 
-        expect(await zVersionComponentsPage.countDeleteButtons()).toBe(nbButtonsBeforeDelete - 1);
+        expect(await zVersionComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
     });
 
-    afterAll(async () => {
+    after(async () => {
         await navBarPage.autoSignOut();
     });
 });

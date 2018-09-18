@@ -1,7 +1,10 @@
+/* tslint:disable no-unused-expression */
 import { browser, ExpectedConditions as ec, protractor } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { EmployeeComponentsPage, EmployeeDeleteDialog, EmployeeUpdatePage } from './employee.page-object';
+
+const expect = chai.expect;
 
 describe('Employee e2e test', () => {
     let navBarPage: NavBarPage;
@@ -10,7 +13,7 @@ describe('Employee e2e test', () => {
     let employeeComponentsPage: EmployeeComponentsPage;
     let employeeDeleteDialog: EmployeeDeleteDialog;
 
-    beforeAll(async () => {
+    before(async () => {
         await browser.get('/');
         navBarPage = new NavBarPage();
         signInPage = await navBarPage.getSignInPage();
@@ -21,36 +24,40 @@ describe('Employee e2e test', () => {
     it('should load Employees', async () => {
         await navBarPage.goToEntity('employee');
         employeeComponentsPage = new EmployeeComponentsPage();
-        expect(await employeeComponentsPage.getTitle()).toMatch(/jhiApp.employee.home.title/);
+        expect(await employeeComponentsPage.getTitle()).to.eq('jhiApp.employee.home.title');
     });
 
     it('should load create Employee page', async () => {
         await employeeComponentsPage.clickOnCreateButton();
         employeeUpdatePage = new EmployeeUpdatePage();
-        expect(await employeeUpdatePage.getPageTitle()).toMatch(/jhiApp.employee.home.createOrEditLabel/);
+        expect(await employeeUpdatePage.getPageTitle()).to.eq('jhiApp.employee.home.createOrEditLabel');
         await employeeUpdatePage.cancel();
     });
 
     it('should create and save Employees', async () => {
+        const nbButtonsBeforeCreate = await employeeComponentsPage.countDeleteButtons();
+
         await employeeComponentsPage.clickOnCreateButton();
         await employeeUpdatePage.setFirstNameInput('firstName');
-        expect(await employeeUpdatePage.getFirstNameInput()).toMatch('firstName');
+        expect(await employeeUpdatePage.getFirstNameInput()).to.eq('firstName');
         await employeeUpdatePage.setLastNameInput('lastName');
-        expect(await employeeUpdatePage.getLastNameInput()).toMatch('lastName');
+        expect(await employeeUpdatePage.getLastNameInput()).to.eq('lastName');
         await employeeUpdatePage.setEmailInput('email');
-        expect(await employeeUpdatePage.getEmailInput()).toMatch('email');
+        expect(await employeeUpdatePage.getEmailInput()).to.eq('email');
         await employeeUpdatePage.setPhoneNumberInput('phoneNumber');
-        expect(await employeeUpdatePage.getPhoneNumberInput()).toMatch('phoneNumber');
+        expect(await employeeUpdatePage.getPhoneNumberInput()).to.eq('phoneNumber');
         await employeeUpdatePage.setHireDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM');
-        expect(await employeeUpdatePage.getHireDateInput()).toContain('2001-01-01T02:30');
+        expect(await employeeUpdatePage.getHireDateInput()).to.contain('2001-01-01T02:30');
         await employeeUpdatePage.setSalaryInput('5');
-        expect(await employeeUpdatePage.getSalaryInput()).toMatch('5');
+        expect(await employeeUpdatePage.getSalaryInput()).to.eq('5');
         await employeeUpdatePage.setCommissionPctInput('5');
-        expect(await employeeUpdatePage.getCommissionPctInput()).toMatch('5');
+        expect(await employeeUpdatePage.getCommissionPctInput()).to.eq('5');
         await employeeUpdatePage.departmentSelectLastOption();
         await employeeUpdatePage.managerSelectLastOption();
         await employeeUpdatePage.save();
-        expect(await employeeUpdatePage.getSaveButton().isPresent()).toBeFalsy();
+        expect(await employeeUpdatePage.getSaveButton().isPresent()).to.be.false;
+
+        expect(await employeeComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1);
     });
 
     it('should delete last Employee', async () => {
@@ -58,13 +65,13 @@ describe('Employee e2e test', () => {
         await employeeComponentsPage.clickOnLastDeleteButton();
 
         employeeDeleteDialog = new EmployeeDeleteDialog();
-        expect(await employeeDeleteDialog.getDialogTitle()).toMatch(/jhiApp.employee.delete.question/);
+        expect(await employeeDeleteDialog.getDialogTitle()).to.eq('jhiApp.employee.delete.question');
         await employeeDeleteDialog.clickOnConfirmButton();
 
-        expect(await employeeComponentsPage.countDeleteButtons()).toBe(nbButtonsBeforeDelete - 1);
+        expect(await employeeComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
     });
 
-    afterAll(async () => {
+    after(async () => {
         await navBarPage.autoSignOut();
     });
 });

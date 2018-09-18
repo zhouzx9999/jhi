@@ -1,7 +1,10 @@
+/* tslint:disable no-unused-expression */
 import { browser, ExpectedConditions as ec } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { CountryComponentsPage, CountryDeleteDialog, CountryUpdatePage } from './country.page-object';
+
+const expect = chai.expect;
 
 describe('Country e2e test', () => {
     let navBarPage: NavBarPage;
@@ -10,7 +13,7 @@ describe('Country e2e test', () => {
     let countryComponentsPage: CountryComponentsPage;
     let countryDeleteDialog: CountryDeleteDialog;
 
-    beforeAll(async () => {
+    before(async () => {
         await browser.get('/');
         navBarPage = new NavBarPage();
         signInPage = await navBarPage.getSignInPage();
@@ -21,23 +24,27 @@ describe('Country e2e test', () => {
     it('should load Countries', async () => {
         await navBarPage.goToEntity('country');
         countryComponentsPage = new CountryComponentsPage();
-        expect(await countryComponentsPage.getTitle()).toMatch(/jhiApp.country.home.title/);
+        expect(await countryComponentsPage.getTitle()).to.eq('jhiApp.country.home.title');
     });
 
     it('should load create Country page', async () => {
         await countryComponentsPage.clickOnCreateButton();
         countryUpdatePage = new CountryUpdatePage();
-        expect(await countryUpdatePage.getPageTitle()).toMatch(/jhiApp.country.home.createOrEditLabel/);
+        expect(await countryUpdatePage.getPageTitle()).to.eq('jhiApp.country.home.createOrEditLabel');
         await countryUpdatePage.cancel();
     });
 
     it('should create and save Countries', async () => {
+        const nbButtonsBeforeCreate = await countryComponentsPage.countDeleteButtons();
+
         await countryComponentsPage.clickOnCreateButton();
         await countryUpdatePage.setCountryNameInput('countryName');
-        expect(await countryUpdatePage.getCountryNameInput()).toMatch('countryName');
+        expect(await countryUpdatePage.getCountryNameInput()).to.eq('countryName');
         await countryUpdatePage.regionSelectLastOption();
         await countryUpdatePage.save();
-        expect(await countryUpdatePage.getSaveButton().isPresent()).toBeFalsy();
+        expect(await countryUpdatePage.getSaveButton().isPresent()).to.be.false;
+
+        expect(await countryComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1);
     });
 
     it('should delete last Country', async () => {
@@ -45,13 +52,13 @@ describe('Country e2e test', () => {
         await countryComponentsPage.clickOnLastDeleteButton();
 
         countryDeleteDialog = new CountryDeleteDialog();
-        expect(await countryDeleteDialog.getDialogTitle()).toMatch(/jhiApp.country.delete.question/);
+        expect(await countryDeleteDialog.getDialogTitle()).to.eq('jhiApp.country.delete.question');
         await countryDeleteDialog.clickOnConfirmButton();
 
-        expect(await countryComponentsPage.countDeleteButtons()).toBe(nbButtonsBeforeDelete - 1);
+        expect(await countryComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
     });
 
-    afterAll(async () => {
+    after(async () => {
         await navBarPage.autoSignOut();
     });
 });
