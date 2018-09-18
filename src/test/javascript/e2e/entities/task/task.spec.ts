@@ -1,7 +1,10 @@
+/* tslint:disable no-unused-expression */
 import { browser, ExpectedConditions as ec } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { TaskComponentsPage, TaskDeleteDialog, TaskUpdatePage } from './task.page-object';
+
+const expect = chai.expect;
 
 describe('Task e2e test', () => {
     let navBarPage: NavBarPage;
@@ -10,7 +13,7 @@ describe('Task e2e test', () => {
     let taskComponentsPage: TaskComponentsPage;
     let taskDeleteDialog: TaskDeleteDialog;
 
-    beforeAll(async () => {
+    before(async () => {
         await browser.get('/');
         navBarPage = new NavBarPage();
         signInPage = await navBarPage.getSignInPage();
@@ -21,24 +24,28 @@ describe('Task e2e test', () => {
     it('should load Tasks', async () => {
         await navBarPage.goToEntity('task');
         taskComponentsPage = new TaskComponentsPage();
-        expect(await taskComponentsPage.getTitle()).toMatch(/jhiApp.task.home.title/);
+        expect(await taskComponentsPage.getTitle()).to.eq('jhiApp.task.home.title');
     });
 
     it('should load create Task page', async () => {
         await taskComponentsPage.clickOnCreateButton();
         taskUpdatePage = new TaskUpdatePage();
-        expect(await taskUpdatePage.getPageTitle()).toMatch(/jhiApp.task.home.createOrEditLabel/);
+        expect(await taskUpdatePage.getPageTitle()).to.eq('jhiApp.task.home.createOrEditLabel');
         await taskUpdatePage.cancel();
     });
 
     it('should create and save Tasks', async () => {
+        const nbButtonsBeforeCreate = await taskComponentsPage.countDeleteButtons();
+
         await taskComponentsPage.clickOnCreateButton();
         await taskUpdatePage.setTitleInput('title');
-        expect(await taskUpdatePage.getTitleInput()).toMatch('title');
+        expect(await taskUpdatePage.getTitleInput()).to.eq('title');
         await taskUpdatePage.setDescriptionInput('description');
-        expect(await taskUpdatePage.getDescriptionInput()).toMatch('description');
+        expect(await taskUpdatePage.getDescriptionInput()).to.eq('description');
         await taskUpdatePage.save();
-        expect(await taskUpdatePage.getSaveButton().isPresent()).toBeFalsy();
+        expect(await taskUpdatePage.getSaveButton().isPresent()).to.be.false;
+
+        expect(await taskComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1);
     });
 
     it('should delete last Task', async () => {
@@ -46,13 +53,13 @@ describe('Task e2e test', () => {
         await taskComponentsPage.clickOnLastDeleteButton();
 
         taskDeleteDialog = new TaskDeleteDialog();
-        expect(await taskDeleteDialog.getDialogTitle()).toMatch(/jhiApp.task.delete.question/);
+        expect(await taskDeleteDialog.getDialogTitle()).to.eq('jhiApp.task.delete.question');
         await taskDeleteDialog.clickOnConfirmButton();
 
-        expect(await taskComponentsPage.countDeleteButtons()).toBe(nbButtonsBeforeDelete - 1);
+        expect(await taskComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
     });
 
-    afterAll(async () => {
+    after(async () => {
         await navBarPage.autoSignOut();
     });
 });

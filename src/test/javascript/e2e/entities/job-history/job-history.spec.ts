@@ -1,7 +1,10 @@
+/* tslint:disable no-unused-expression */
 import { browser, ExpectedConditions as ec, protractor } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { JobHistoryComponentsPage, JobHistoryDeleteDialog, JobHistoryUpdatePage } from './job-history.page-object';
+
+const expect = chai.expect;
 
 describe('JobHistory e2e test', () => {
     let navBarPage: NavBarPage;
@@ -10,7 +13,7 @@ describe('JobHistory e2e test', () => {
     let jobHistoryComponentsPage: JobHistoryComponentsPage;
     let jobHistoryDeleteDialog: JobHistoryDeleteDialog;
 
-    beforeAll(async () => {
+    before(async () => {
         await browser.get('/');
         navBarPage = new NavBarPage();
         signInPage = await navBarPage.getSignInPage();
@@ -21,28 +24,32 @@ describe('JobHistory e2e test', () => {
     it('should load JobHistories', async () => {
         await navBarPage.goToEntity('job-history');
         jobHistoryComponentsPage = new JobHistoryComponentsPage();
-        expect(await jobHistoryComponentsPage.getTitle()).toMatch(/jhiApp.jobHistory.home.title/);
+        expect(await jobHistoryComponentsPage.getTitle()).to.eq('jhiApp.jobHistory.home.title');
     });
 
     it('should load create JobHistory page', async () => {
         await jobHistoryComponentsPage.clickOnCreateButton();
         jobHistoryUpdatePage = new JobHistoryUpdatePage();
-        expect(await jobHistoryUpdatePage.getPageTitle()).toMatch(/jhiApp.jobHistory.home.createOrEditLabel/);
+        expect(await jobHistoryUpdatePage.getPageTitle()).to.eq('jhiApp.jobHistory.home.createOrEditLabel');
         await jobHistoryUpdatePage.cancel();
     });
 
     it('should create and save JobHistories', async () => {
+        const nbButtonsBeforeCreate = await jobHistoryComponentsPage.countDeleteButtons();
+
         await jobHistoryComponentsPage.clickOnCreateButton();
         await jobHistoryUpdatePage.setStartDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM');
-        expect(await jobHistoryUpdatePage.getStartDateInput()).toContain('2001-01-01T02:30');
+        expect(await jobHistoryUpdatePage.getStartDateInput()).to.contain('2001-01-01T02:30');
         await jobHistoryUpdatePage.setEndDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM');
-        expect(await jobHistoryUpdatePage.getEndDateInput()).toContain('2001-01-01T02:30');
+        expect(await jobHistoryUpdatePage.getEndDateInput()).to.contain('2001-01-01T02:30');
         await jobHistoryUpdatePage.languageSelectLastOption();
         await jobHistoryUpdatePage.jobSelectLastOption();
         await jobHistoryUpdatePage.departmentSelectLastOption();
         await jobHistoryUpdatePage.employeeSelectLastOption();
         await jobHistoryUpdatePage.save();
-        expect(await jobHistoryUpdatePage.getSaveButton().isPresent()).toBeFalsy();
+        expect(await jobHistoryUpdatePage.getSaveButton().isPresent()).to.be.false;
+
+        expect(await jobHistoryComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1);
     });
 
     it('should delete last JobHistory', async () => {
@@ -50,13 +57,13 @@ describe('JobHistory e2e test', () => {
         await jobHistoryComponentsPage.clickOnLastDeleteButton();
 
         jobHistoryDeleteDialog = new JobHistoryDeleteDialog();
-        expect(await jobHistoryDeleteDialog.getDialogTitle()).toMatch(/jhiApp.jobHistory.delete.question/);
+        expect(await jobHistoryDeleteDialog.getDialogTitle()).to.eq('jhiApp.jobHistory.delete.question');
         await jobHistoryDeleteDialog.clickOnConfirmButton();
 
-        expect(await jobHistoryComponentsPage.countDeleteButtons()).toBe(nbButtonsBeforeDelete - 1);
+        expect(await jobHistoryComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
     });
 
-    afterAll(async () => {
+    after(async () => {
         await navBarPage.autoSignOut();
     });
 });

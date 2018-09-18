@@ -1,7 +1,10 @@
+/* tslint:disable no-unused-expression */
 import { browser, ExpectedConditions as ec } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { ZPlanTypeComponentsPage, ZPlanTypeDeleteDialog, ZPlanTypeUpdatePage } from './z-plan-type.page-object';
+
+const expect = chai.expect;
 
 describe('ZPlanType e2e test', () => {
     let navBarPage: NavBarPage;
@@ -10,7 +13,7 @@ describe('ZPlanType e2e test', () => {
     let zPlanTypeComponentsPage: ZPlanTypeComponentsPage;
     let zPlanTypeDeleteDialog: ZPlanTypeDeleteDialog;
 
-    beforeAll(async () => {
+    before(async () => {
         await browser.get('/');
         navBarPage = new NavBarPage();
         signInPage = await navBarPage.getSignInPage();
@@ -21,22 +24,26 @@ describe('ZPlanType e2e test', () => {
     it('should load ZPlanTypes', async () => {
         await navBarPage.goToEntity('z-plan-type');
         zPlanTypeComponentsPage = new ZPlanTypeComponentsPage();
-        expect(await zPlanTypeComponentsPage.getTitle()).toMatch(/jhiApp.zPlanType.home.title/);
+        expect(await zPlanTypeComponentsPage.getTitle()).to.eq('jhiApp.zPlanType.home.title');
     });
 
     it('should load create ZPlanType page', async () => {
         await zPlanTypeComponentsPage.clickOnCreateButton();
         zPlanTypeUpdatePage = new ZPlanTypeUpdatePage();
-        expect(await zPlanTypeUpdatePage.getPageTitle()).toMatch(/jhiApp.zPlanType.home.createOrEditLabel/);
+        expect(await zPlanTypeUpdatePage.getPageTitle()).to.eq('jhiApp.zPlanType.home.createOrEditLabel');
         await zPlanTypeUpdatePage.cancel();
     });
 
     it('should create and save ZPlanTypes', async () => {
+        const nbButtonsBeforeCreate = await zPlanTypeComponentsPage.countDeleteButtons();
+
         await zPlanTypeComponentsPage.clickOnCreateButton();
         await zPlanTypeUpdatePage.setTypeNameInput('typeName');
-        expect(await zPlanTypeUpdatePage.getTypeNameInput()).toMatch('typeName');
+        expect(await zPlanTypeUpdatePage.getTypeNameInput()).to.eq('typeName');
         await zPlanTypeUpdatePage.save();
-        expect(await zPlanTypeUpdatePage.getSaveButton().isPresent()).toBeFalsy();
+        expect(await zPlanTypeUpdatePage.getSaveButton().isPresent()).to.be.false;
+
+        expect(await zPlanTypeComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1);
     });
 
     it('should delete last ZPlanType', async () => {
@@ -44,13 +51,13 @@ describe('ZPlanType e2e test', () => {
         await zPlanTypeComponentsPage.clickOnLastDeleteButton();
 
         zPlanTypeDeleteDialog = new ZPlanTypeDeleteDialog();
-        expect(await zPlanTypeDeleteDialog.getDialogTitle()).toMatch(/jhiApp.zPlanType.delete.question/);
+        expect(await zPlanTypeDeleteDialog.getDialogTitle()).to.eq('jhiApp.zPlanType.delete.question');
         await zPlanTypeDeleteDialog.clickOnConfirmButton();
 
-        expect(await zPlanTypeComponentsPage.countDeleteButtons()).toBe(nbButtonsBeforeDelete - 1);
+        expect(await zPlanTypeComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
     });
 
-    afterAll(async () => {
+    after(async () => {
         await navBarPage.autoSignOut();
     });
 });

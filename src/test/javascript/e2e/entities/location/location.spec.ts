@@ -1,7 +1,10 @@
+/* tslint:disable no-unused-expression */
 import { browser, ExpectedConditions as ec } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { LocationComponentsPage, LocationDeleteDialog, LocationUpdatePage } from './location.page-object';
+
+const expect = chai.expect;
 
 describe('Location e2e test', () => {
     let navBarPage: NavBarPage;
@@ -10,7 +13,7 @@ describe('Location e2e test', () => {
     let locationComponentsPage: LocationComponentsPage;
     let locationDeleteDialog: LocationDeleteDialog;
 
-    beforeAll(async () => {
+    before(async () => {
         await browser.get('/');
         navBarPage = new NavBarPage();
         signInPage = await navBarPage.getSignInPage();
@@ -21,29 +24,33 @@ describe('Location e2e test', () => {
     it('should load Locations', async () => {
         await navBarPage.goToEntity('location');
         locationComponentsPage = new LocationComponentsPage();
-        expect(await locationComponentsPage.getTitle()).toMatch(/jhiApp.location.home.title/);
+        expect(await locationComponentsPage.getTitle()).to.eq('jhiApp.location.home.title');
     });
 
     it('should load create Location page', async () => {
         await locationComponentsPage.clickOnCreateButton();
         locationUpdatePage = new LocationUpdatePage();
-        expect(await locationUpdatePage.getPageTitle()).toMatch(/jhiApp.location.home.createOrEditLabel/);
+        expect(await locationUpdatePage.getPageTitle()).to.eq('jhiApp.location.home.createOrEditLabel');
         await locationUpdatePage.cancel();
     });
 
     it('should create and save Locations', async () => {
+        const nbButtonsBeforeCreate = await locationComponentsPage.countDeleteButtons();
+
         await locationComponentsPage.clickOnCreateButton();
         await locationUpdatePage.setStreetAddressInput('streetAddress');
-        expect(await locationUpdatePage.getStreetAddressInput()).toMatch('streetAddress');
+        expect(await locationUpdatePage.getStreetAddressInput()).to.eq('streetAddress');
         await locationUpdatePage.setPostalCodeInput('postalCode');
-        expect(await locationUpdatePage.getPostalCodeInput()).toMatch('postalCode');
+        expect(await locationUpdatePage.getPostalCodeInput()).to.eq('postalCode');
         await locationUpdatePage.setCityInput('city');
-        expect(await locationUpdatePage.getCityInput()).toMatch('city');
+        expect(await locationUpdatePage.getCityInput()).to.eq('city');
         await locationUpdatePage.setStateProvinceInput('stateProvince');
-        expect(await locationUpdatePage.getStateProvinceInput()).toMatch('stateProvince');
+        expect(await locationUpdatePage.getStateProvinceInput()).to.eq('stateProvince');
         await locationUpdatePage.countrySelectLastOption();
         await locationUpdatePage.save();
-        expect(await locationUpdatePage.getSaveButton().isPresent()).toBeFalsy();
+        expect(await locationUpdatePage.getSaveButton().isPresent()).to.be.false;
+
+        expect(await locationComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1);
     });
 
     it('should delete last Location', async () => {
@@ -51,13 +58,13 @@ describe('Location e2e test', () => {
         await locationComponentsPage.clickOnLastDeleteButton();
 
         locationDeleteDialog = new LocationDeleteDialog();
-        expect(await locationDeleteDialog.getDialogTitle()).toMatch(/jhiApp.location.delete.question/);
+        expect(await locationDeleteDialog.getDialogTitle()).to.eq('jhiApp.location.delete.question');
         await locationDeleteDialog.clickOnConfirmButton();
 
-        expect(await locationComponentsPage.countDeleteButtons()).toBe(nbButtonsBeforeDelete - 1);
+        expect(await locationComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
     });
 
-    afterAll(async () => {
+    after(async () => {
         await navBarPage.autoSignOut();
     });
 });
