@@ -1,0 +1,43 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="zVersion">
+            <h2><span jhiTranslate="jhiApp.zVersion.detail.title">Z Version</span> {{zVersion.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="jhiApp.zVersion.versionType">Version Type</span></dt>
+                <dd>
+                    <span>{{zVersion.versionType}}</span>
+                </dd>
+                <dt><span jhiTranslate="jhiApp.zVersion.accessType">Access Type</span></dt>
+                <dd>
+                    <span>{{zVersion.accessType}}</span>
+                </dd>
+                <dt><span jhiTranslate="jhiApp.zVersion.inUse">In Use</span></dt>
+                <dd>
+                    <span>{{zVersion.inUse}}</span>
+                </dd>
+                <dt><span jhiTranslate="jhiApp.zVersion.dateInUse">Date In Use</span></dt>
+                <dd>
+                    <span>{{zVersion.dateInUse}}</span>
+                </dd>
+                <dt><span jhiTranslate="jhiApp.zVersion.accessType1">Access Type 1</span></dt>
+                <dd>
+                    <span jhiTranslate="{{'jhiApp.Zenumer.' + zVersion.accessType1}}">{{zVersion.accessType1}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/z-version', zVersion.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

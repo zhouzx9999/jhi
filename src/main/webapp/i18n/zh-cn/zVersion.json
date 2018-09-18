@@ -1,0 +1,26 @@
+
+{
+    "jhiApp": {
+        "zVersion" : {
+            "home": {
+                "title": "Z Versions",
+                "createLabel": "创建新 Z Version",
+                "createOrEditLabel": "创建或编辑 Z Version"
+            },
+            "created": "Z Version {{ param }} 创建成功",
+            "updated": "Z Version {{ param }} 更新成功",
+            "deleted": "Z Version {{ param }} 删除成功",
+            "delete": {
+                "question": "你确定要删除 Z Version {{ id }} 吗？"
+            },
+            "detail": {
+                "title": "Z Version"
+            },
+            "versionType": "Version Type",
+            "accessType": "Access Type",
+            "inUse": "In Use",
+            "dateInUse": "Date In Use",
+            "accessType1": "Access Type 1"
+        }
+    }
+}

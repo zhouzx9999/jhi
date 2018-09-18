@@ -9,6 +9,8 @@ import { JhiTaskModule } from './task/task.module';
 import { JhiEmployeeModule } from './employee/employee.module';
 import { JhiJobModule } from './job/job.module';
 import { JhiJobHistoryModule } from './job-history/job-history.module';
+import { JhiZPlanTypeModule } from './z-plan-type/z-plan-type.module';
+import { JhiZVersionModule } from './z-version/z-version.module';
 /* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
 
 @NgModule({
@@ -23,6 +25,8 @@ import { JhiJobHistoryModule } from './job-history/job-history.module';
         JhiEmployeeModule,
         JhiJobModule,
         JhiJobHistoryModule,
+        JhiZPlanTypeModule,
+        JhiZVersionModule,
         /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
     ],
     declarations: [],

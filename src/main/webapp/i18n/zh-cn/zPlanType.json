@@ -1,0 +1,22 @@
+
+{
+    "jhiApp": {
+        "zPlanType" : {
+            "home": {
+                "title": "Z Plan Types",
+                "createLabel": "创建新 Z Plan Type",
+                "createOrEditLabel": "创建或编辑 Z Plan Type"
+            },
+            "created": "Z Plan Type {{ param }} 创建成功",
+            "updated": "Z Plan Type {{ param }} 更新成功",
+            "deleted": "Z Plan Type {{ param }} 删除成功",
+            "delete": {
+                "question": "你确定要删除 Z Plan Type {{ id }} 吗？"
+            },
+            "detail": {
+                "title": "Z Plan Type"
+            },
+            "typeName": "Type Name"
+        }
+    }
+}

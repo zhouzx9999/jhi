@@ -7,14 +7,6 @@
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
                 "main": "数据",
-                "regionMySuffix": "Region",
-                "countryMySuffix": "Country",
-                "locationMySuffix": "Location",
-                "departmentMySuffix": "Department",
-                "taskMySuffix": "Task",
-                "employeeMySuffix": "Employee",
-                "jobMySuffix": "Job",
-                "jobHistoryMySuffix": "Job History",
                 "zEntity": "Z Entity",
                 "region": "Region",
                 "country": "Country",
@@ -24,6 +16,8 @@
                 "employee": "Employee",
                 "job": "Job",
                 "jobHistory": "Job History",
+                "zPlanType": "Z Plan Type",
+                "zVersion": "Z Version",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
