@@ -28,7 +28,7 @@ public class LocationResource {
 
     private static final String ENTITY_NAME = "location";
 
-    private final LocationService locationService;
+    private LocationService locationService;
 
     public LocationResource(LocationService locationService) {
         this.locationService = locationService;

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import * as moment from 'moment';
 
 import { IZVersion } from 'app/shared/model/z-version.model';
 import { ZVersionService } from './z-version.service';
@@ -11,7 +12,7 @@ import { ZVersionService } from './z-version.service';
     templateUrl: './z-version-update.component.html'
 })
 export class ZVersionUpdateComponent implements OnInit {
-    private _zVersion: IZVersion;
+    zVersion: IZVersion;
     isSaving: boolean;
     dateInUseDp: any;
 
@@ -48,12 +49,5 @@ export class ZVersionUpdateComponent implements OnInit {
 
     private onSaveError() {
         this.isSaving = false;
-    }
-    get zVersion() {
-        return this._zVersion;
-    }
-
-    set zVersion(zVersion: IZVersion) {
-        this._zVersion = zVersion;
     }
 }

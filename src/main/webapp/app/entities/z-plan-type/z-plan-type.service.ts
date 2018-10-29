@@ -11,7 +11,7 @@ type EntityArrayResponseType = HttpResponse<IZPlanType[]>;
 
 @Injectable({ providedIn: 'root' })
 export class ZPlanTypeService {
-    private resourceUrl = SERVER_API_URL + 'api/z-plan-types';
+    public resourceUrl = SERVER_API_URL + 'api/z-plan-types';
 
     constructor(private http: HttpClient) {}
 

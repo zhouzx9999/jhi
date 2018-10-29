@@ -28,7 +28,7 @@ public class CountryResource {
 
     private static final String ENTITY_NAME = "country";
 
-    private final CountryService countryService;
+    private CountryService countryService;
 
     public CountryResource(CountryService countryService) {
         this.countryService = countryService;

@@ -29,7 +29,7 @@ public class ZPlanTypeResource {
 
     private static final String ENTITY_NAME = "zPlanType";
 
-    private final ZPlanTypeRepository zPlanTypeRepository;
+    private ZPlanTypeRepository zPlanTypeRepository;
 
     public ZPlanTypeResource(ZPlanTypeRepository zPlanTypeRepository) {
         this.zPlanTypeRepository = zPlanTypeRepository;

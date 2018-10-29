@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec } from 'protractor';
+import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { ZEntityComponentsPage, ZEntityDeleteDialog, ZEntityUpdatePage } from './z-entity.page-object';
@@ -38,17 +38,19 @@ describe('ZEntity e2e test', () => {
         const nbButtonsBeforeCreate = await zEntityComponentsPage.countDeleteButtons();
 
         await zEntityComponentsPage.clickOnCreateButton();
-        await zEntityUpdatePage.setEntityNameInput('entityName');
+        await promise.all([
+            zEntityUpdatePage.setEntityNameInput('entityName'),
+            zEntityUpdatePage.setEntityAbbreInput('entityAbbre'),
+            zEntityUpdatePage.setEntityStdNameInput('entityStdName'),
+            zEntityUpdatePage.setEntityTypeInput('5'),
+            zEntityUpdatePage.setIsGuiKouInput('5'),
+            zEntityUpdatePage.createrSelectLastOption()
+        ]);
         expect(await zEntityUpdatePage.getEntityNameInput()).to.eq('entityName');
-        await zEntityUpdatePage.setEntityAbbreInput('entityAbbre');
         expect(await zEntityUpdatePage.getEntityAbbreInput()).to.eq('entityAbbre');
-        await zEntityUpdatePage.setEntityStdNameInput('entityStdName');
         expect(await zEntityUpdatePage.getEntityStdNameInput()).to.eq('entityStdName');
-        await zEntityUpdatePage.setEntityTypeInput('5');
         expect(await zEntityUpdatePage.getEntityTypeInput()).to.eq('5');
-        await zEntityUpdatePage.setIsGuiKouInput('5');
         expect(await zEntityUpdatePage.getIsGuiKouInput()).to.eq('5');
-        await zEntityUpdatePage.createrSelectLastOption();
         await zEntityUpdatePage.save();
         expect(await zEntityUpdatePage.getSaveButton().isPresent()).to.be.false;
 

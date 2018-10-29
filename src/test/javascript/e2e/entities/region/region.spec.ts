@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec } from 'protractor';
+import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { RegionComponentsPage, RegionDeleteDialog, RegionUpdatePage } from './region.page-object';
@@ -38,7 +38,7 @@ describe('Region e2e test', () => {
         const nbButtonsBeforeCreate = await regionComponentsPage.countDeleteButtons();
 
         await regionComponentsPage.clickOnCreateButton();
-        await regionUpdatePage.setRegionNameInput('regionName');
+        await promise.all([regionUpdatePage.setRegionNameInput('regionName')]);
         expect(await regionUpdatePage.getRegionNameInput()).to.eq('regionName');
         await regionUpdatePage.save();
         expect(await regionUpdatePage.getSaveButton().isPresent()).to.be.false;

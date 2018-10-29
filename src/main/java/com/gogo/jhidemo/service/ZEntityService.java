@@ -23,9 +23,9 @@ public class ZEntityService {
 
     private final Logger log = LoggerFactory.getLogger(ZEntityService.class);
 
-    private final ZEntityRepository zEntityRepository;
+    private ZEntityRepository zEntityRepository;
 
-    private final ZEntityMapper zEntityMapper;
+    private ZEntityMapper zEntityMapper;
 
     public ZEntityService(ZEntityRepository zEntityRepository, ZEntityMapper zEntityMapper) {
         this.zEntityRepository = zEntityRepository;
@@ -40,6 +40,7 @@ public class ZEntityService {
      */
     public ZEntityDTO save(ZEntityDTO zEntityDTO) {
         log.debug("Request to save ZEntity : {}", zEntityDTO);
+
         ZEntity zEntity = zEntityMapper.toEntity(zEntityDTO);
         zEntity = zEntityRepository.save(zEntity);
         return zEntityMapper.toDto(zEntity);

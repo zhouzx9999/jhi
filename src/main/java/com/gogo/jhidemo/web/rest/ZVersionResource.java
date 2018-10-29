@@ -28,7 +28,7 @@ public class ZVersionResource {
 
     private static final String ENTITY_NAME = "zVersion";
 
-    private final ZVersionRepository zVersionRepository;
+    private ZVersionRepository zVersionRepository;
 
     public ZVersionResource(ZVersionRepository zVersionRepository) {
         this.zVersionRepository = zVersionRepository;

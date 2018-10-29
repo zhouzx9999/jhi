@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec } from 'protractor';
+import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { ZVersionComponentsPage, ZVersionDeleteDialog, ZVersionUpdatePage } from './z-version.page-object';
@@ -38,15 +38,17 @@ describe('ZVersion e2e test', () => {
         const nbButtonsBeforeCreate = await zVersionComponentsPage.countDeleteButtons();
 
         await zVersionComponentsPage.clickOnCreateButton();
-        await zVersionUpdatePage.setVersionTypeInput('5');
+        await promise.all([
+            zVersionUpdatePage.setVersionTypeInput('5'),
+            zVersionUpdatePage.setAccessTypeInput('5'),
+            zVersionUpdatePage.setInUseInput('5'),
+            zVersionUpdatePage.setDateInUseInput('2000-12-31'),
+            zVersionUpdatePage.accessType1SelectLastOption()
+        ]);
         expect(await zVersionUpdatePage.getVersionTypeInput()).to.eq('5');
-        await zVersionUpdatePage.setAccessTypeInput('5');
         expect(await zVersionUpdatePage.getAccessTypeInput()).to.eq('5');
-        await zVersionUpdatePage.setInUseInput('5');
         expect(await zVersionUpdatePage.getInUseInput()).to.eq('5');
-        await zVersionUpdatePage.setDateInUseInput('2000-12-31');
         expect(await zVersionUpdatePage.getDateInUseInput()).to.eq('2000-12-31');
-        await zVersionUpdatePage.accessType1SelectLastOption();
         await zVersionUpdatePage.save();
         expect(await zVersionUpdatePage.getSaveButton().isPresent()).to.be.false;
 

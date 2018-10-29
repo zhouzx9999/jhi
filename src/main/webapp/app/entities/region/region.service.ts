@@ -11,7 +11,7 @@ type EntityArrayResponseType = HttpResponse<IRegion[]>;
 
 @Injectable({ providedIn: 'root' })
 export class RegionService {
-    private resourceUrl = SERVER_API_URL + 'api/regions';
+    public resourceUrl = SERVER_API_URL + 'api/regions';
 
     constructor(private http: HttpClient) {}
 

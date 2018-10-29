@@ -14,7 +14,7 @@ import { RegionService } from 'app/entities/region';
     templateUrl: './country-update.component.html'
 })
 export class CountryUpdateComponent implements OnInit {
-    private _country: ICountry;
+    country: ICountry;
     isSaving: boolean;
 
     regions: IRegion[];
@@ -80,12 +80,5 @@ export class CountryUpdateComponent implements OnInit {
 
     trackRegionById(index: number, item: IRegion) {
         return item.id;
-    }
-    get country() {
-        return this._country;
-    }
-
-    set country(country: ICountry) {
-        this._country = country;
     }
 }

@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec } from 'protractor';
+import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { JobComponentsPage, JobDeleteDialog, JobUpdatePage } from './job.page-object';
@@ -38,14 +38,16 @@ describe('Job e2e test', () => {
         const nbButtonsBeforeCreate = await jobComponentsPage.countDeleteButtons();
 
         await jobComponentsPage.clickOnCreateButton();
-        await jobUpdatePage.setJobTitleInput('jobTitle');
+        await promise.all([
+            jobUpdatePage.setJobTitleInput('jobTitle'),
+            jobUpdatePage.setMinSalaryInput('5'),
+            jobUpdatePage.setMaxSalaryInput('5'),
+            jobUpdatePage.employeeSelectLastOption()
+            // jobUpdatePage.taskSelectLastOption(),
+        ]);
         expect(await jobUpdatePage.getJobTitleInput()).to.eq('jobTitle');
-        await jobUpdatePage.setMinSalaryInput('5');
         expect(await jobUpdatePage.getMinSalaryInput()).to.eq('5');
-        await jobUpdatePage.setMaxSalaryInput('5');
         expect(await jobUpdatePage.getMaxSalaryInput()).to.eq('5');
-        await jobUpdatePage.employeeSelectLastOption();
-        // jobUpdatePage.taskSelectLastOption();
         await jobUpdatePage.save();
         expect(await jobUpdatePage.getSaveButton().isPresent()).to.be.false;
 

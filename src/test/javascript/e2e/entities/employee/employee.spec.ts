@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec, protractor } from 'protractor';
+import { browser, ExpectedConditions as ec, protractor, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { EmployeeComponentsPage, EmployeeDeleteDialog, EmployeeUpdatePage } from './employee.page-object';
@@ -38,22 +38,24 @@ describe('Employee e2e test', () => {
         const nbButtonsBeforeCreate = await employeeComponentsPage.countDeleteButtons();
 
         await employeeComponentsPage.clickOnCreateButton();
-        await employeeUpdatePage.setFirstNameInput('firstName');
+        await promise.all([
+            employeeUpdatePage.setFirstNameInput('firstName'),
+            employeeUpdatePage.setLastNameInput('lastName'),
+            employeeUpdatePage.setEmailInput('email'),
+            employeeUpdatePage.setPhoneNumberInput('phoneNumber'),
+            employeeUpdatePage.setHireDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
+            employeeUpdatePage.setSalaryInput('5'),
+            employeeUpdatePage.setCommissionPctInput('5'),
+            employeeUpdatePage.departmentSelectLastOption(),
+            employeeUpdatePage.managerSelectLastOption()
+        ]);
         expect(await employeeUpdatePage.getFirstNameInput()).to.eq('firstName');
-        await employeeUpdatePage.setLastNameInput('lastName');
         expect(await employeeUpdatePage.getLastNameInput()).to.eq('lastName');
-        await employeeUpdatePage.setEmailInput('email');
         expect(await employeeUpdatePage.getEmailInput()).to.eq('email');
-        await employeeUpdatePage.setPhoneNumberInput('phoneNumber');
         expect(await employeeUpdatePage.getPhoneNumberInput()).to.eq('phoneNumber');
-        await employeeUpdatePage.setHireDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM');
         expect(await employeeUpdatePage.getHireDateInput()).to.contain('2001-01-01T02:30');
-        await employeeUpdatePage.setSalaryInput('5');
         expect(await employeeUpdatePage.getSalaryInput()).to.eq('5');
-        await employeeUpdatePage.setCommissionPctInput('5');
         expect(await employeeUpdatePage.getCommissionPctInput()).to.eq('5');
-        await employeeUpdatePage.departmentSelectLastOption();
-        await employeeUpdatePage.managerSelectLastOption();
         await employeeUpdatePage.save();
         expect(await employeeUpdatePage.getSaveButton().isPresent()).to.be.false;
 

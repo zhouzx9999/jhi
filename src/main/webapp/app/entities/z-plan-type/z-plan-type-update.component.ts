@@ -11,7 +11,7 @@ import { ZPlanTypeService } from './z-plan-type.service';
     templateUrl: './z-plan-type-update.component.html'
 })
 export class ZPlanTypeUpdateComponent implements OnInit {
-    private _zPlanType: IZPlanType;
+    zPlanType: IZPlanType;
     isSaving: boolean;
 
     constructor(private zPlanTypeService: ZPlanTypeService, private activatedRoute: ActivatedRoute) {}
@@ -47,12 +47,5 @@ export class ZPlanTypeUpdateComponent implements OnInit {
 
     private onSaveError() {
         this.isSaving = false;
-    }
-    get zPlanType() {
-        return this._zPlanType;
-    }
-
-    set zPlanType(zPlanType: IZPlanType) {
-        this._zPlanType = zPlanType;
     }
 }

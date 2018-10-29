@@ -28,7 +28,7 @@ public class RegionResource {
 
     private static final String ENTITY_NAME = "region";
 
-    private final RegionService regionService;
+    private RegionService regionService;
 
     public RegionResource(RegionService regionService) {
         this.regionService = regionService;

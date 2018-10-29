@@ -14,7 +14,7 @@ import { LocationService } from 'app/entities/location';
     templateUrl: './department-update.component.html'
 })
 export class DepartmentUpdateComponent implements OnInit {
-    private _department: IDepartment;
+    department: IDepartment;
     isSaving: boolean;
 
     locations: ILocation[];
@@ -80,12 +80,5 @@ export class DepartmentUpdateComponent implements OnInit {
 
     trackLocationById(index: number, item: ILocation) {
         return item.id;
-    }
-    get department() {
-        return this._department;
-    }
-
-    set department(department: IDepartment) {
-        this._department = department;
     }
 }

@@ -11,7 +11,7 @@ import { RegionService } from './region.service';
     templateUrl: './region-update.component.html'
 })
 export class RegionUpdateComponent implements OnInit {
-    private _region: IRegion;
+    region: IRegion;
     isSaving: boolean;
 
     constructor(private regionService: RegionService, private activatedRoute: ActivatedRoute) {}
@@ -47,12 +47,5 @@ export class RegionUpdateComponent implements OnInit {
 
     private onSaveError() {
         this.isSaving = false;
-    }
-    get region() {
-        return this._region;
-    }
-
-    set region(region: IRegion) {
-        this._region = region;
     }
 }

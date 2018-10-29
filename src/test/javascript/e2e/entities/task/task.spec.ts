@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec } from 'protractor';
+import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { TaskComponentsPage, TaskDeleteDialog, TaskUpdatePage } from './task.page-object';
@@ -38,9 +38,8 @@ describe('Task e2e test', () => {
         const nbButtonsBeforeCreate = await taskComponentsPage.countDeleteButtons();
 
         await taskComponentsPage.clickOnCreateButton();
-        await taskUpdatePage.setTitleInput('title');
+        await promise.all([taskUpdatePage.setTitleInput('title'), taskUpdatePage.setDescriptionInput('description')]);
         expect(await taskUpdatePage.getTitleInput()).to.eq('title');
-        await taskUpdatePage.setDescriptionInput('description');
         expect(await taskUpdatePage.getDescriptionInput()).to.eq('description');
         await taskUpdatePage.save();
         expect(await taskUpdatePage.getSaveButton().isPresent()).to.be.false;

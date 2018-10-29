@@ -4,7 +4,7 @@
       "packageName": "com.gogo.jhidemo",
       "nativeLanguage": "zh-cn"
     },
-    "jhipsterVersion": "5.3.4",
+    "jhipsterVersion": "5.5.0",
     "applicationType": "monolith",
     "baseName": "jhi",
     "packageName": "com.gogo.jhidemo",
@@ -35,6 +35,7 @@
     "nativeLanguage": "zh-cn",
     "languages": [
       "zh-cn"
-    ]
+    ],
+    "enableHibernateCache": false
   }
 }

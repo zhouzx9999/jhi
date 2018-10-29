@@ -20,7 +20,7 @@ import { EmployeeService } from 'app/entities/employee';
     templateUrl: './job-history-update.component.html'
 })
 export class JobHistoryUpdateComponent implements OnInit {
-    private _jobHistory: IJobHistory;
+    jobHistory: IJobHistory;
     isSaving: boolean;
 
     jobs: IJob[];
@@ -44,6 +44,8 @@ export class JobHistoryUpdateComponent implements OnInit {
         this.isSaving = false;
         this.activatedRoute.data.subscribe(({ jobHistory }) => {
             this.jobHistory = jobHistory;
+            this.startDate = this.jobHistory.startDate != null ? this.jobHistory.startDate.format(DATE_TIME_FORMAT) : null;
+            this.endDate = this.jobHistory.endDate != null ? this.jobHistory.endDate.format(DATE_TIME_FORMAT) : null;
         });
         this.jobService.query({ filter: 'jobhistory-is-null' }).subscribe(
             (res: HttpResponse<IJob[]>) => {
@@ -98,8 +100,8 @@ export class JobHistoryUpdateComponent implements OnInit {
 
     save() {
         this.isSaving = true;
-        this.jobHistory.startDate = moment(this.startDate, DATE_TIME_FORMAT);
-        this.jobHistory.endDate = moment(this.endDate, DATE_TIME_FORMAT);
+        this.jobHistory.startDate = this.startDate != null ? moment(this.startDate, DATE_TIME_FORMAT) : null;
+        this.jobHistory.endDate = this.endDate != null ? moment(this.endDate, DATE_TIME_FORMAT) : null;
         if (this.jobHistory.id !== undefined) {
             this.subscribeToSaveResponse(this.jobHistoryService.update(this.jobHistory));
         } else {
@@ -134,14 +136,5 @@ export class JobHistoryUpdateComponent implements OnInit {
 
     trackEmployeeById(index: number, item: IEmployee) {
         return item.id;
-    }
-    get jobHistory() {
-        return this._jobHistory;
-    }
-
-    set jobHistory(jobHistory: IJobHistory) {
-        this._jobHistory = jobHistory;
-        this.startDate = moment(jobHistory.startDate).format(DATE_TIME_FORMAT);
-        this.endDate = moment(jobHistory.endDate).format(DATE_TIME_FORMAT);
     }
 }

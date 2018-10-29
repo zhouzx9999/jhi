@@ -14,7 +14,7 @@ type EntityArrayResponseType = HttpResponse<IJobHistory[]>;
 
 @Injectable({ providedIn: 'root' })
 export class JobHistoryService {
-    private resourceUrl = SERVER_API_URL + 'api/job-histories';
+    public resourceUrl = SERVER_API_URL + 'api/job-histories';
 
     constructor(private http: HttpClient) {}
 

@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec } from 'protractor';
+import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { ZPlanTypeComponentsPage, ZPlanTypeDeleteDialog, ZPlanTypeUpdatePage } from './z-plan-type.page-object';
@@ -38,7 +38,7 @@ describe('ZPlanType e2e test', () => {
         const nbButtonsBeforeCreate = await zPlanTypeComponentsPage.countDeleteButtons();
 
         await zPlanTypeComponentsPage.clickOnCreateButton();
-        await zPlanTypeUpdatePage.setTypeNameInput('typeName');
+        await promise.all([zPlanTypeUpdatePage.setTypeNameInput('typeName')]);
         expect(await zPlanTypeUpdatePage.getTypeNameInput()).to.eq('typeName');
         await zPlanTypeUpdatePage.save();
         expect(await zPlanTypeUpdatePage.getSaveButton().isPresent()).to.be.false;

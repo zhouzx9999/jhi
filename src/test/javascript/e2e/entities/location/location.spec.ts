@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec } from 'protractor';
+import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { LocationComponentsPage, LocationDeleteDialog, LocationUpdatePage } from './location.page-object';
@@ -38,15 +38,17 @@ describe('Location e2e test', () => {
         const nbButtonsBeforeCreate = await locationComponentsPage.countDeleteButtons();
 
         await locationComponentsPage.clickOnCreateButton();
-        await locationUpdatePage.setStreetAddressInput('streetAddress');
+        await promise.all([
+            locationUpdatePage.setStreetAddressInput('streetAddress'),
+            locationUpdatePage.setPostalCodeInput('postalCode'),
+            locationUpdatePage.setCityInput('city'),
+            locationUpdatePage.setStateProvinceInput('stateProvince'),
+            locationUpdatePage.countrySelectLastOption()
+        ]);
         expect(await locationUpdatePage.getStreetAddressInput()).to.eq('streetAddress');
-        await locationUpdatePage.setPostalCodeInput('postalCode');
         expect(await locationUpdatePage.getPostalCodeInput()).to.eq('postalCode');
-        await locationUpdatePage.setCityInput('city');
         expect(await locationUpdatePage.getCityInput()).to.eq('city');
-        await locationUpdatePage.setStateProvinceInput('stateProvince');
         expect(await locationUpdatePage.getStateProvinceInput()).to.eq('stateProvince');
-        await locationUpdatePage.countrySelectLastOption();
         await locationUpdatePage.save();
         expect(await locationUpdatePage.getSaveButton().isPresent()).to.be.false;
 

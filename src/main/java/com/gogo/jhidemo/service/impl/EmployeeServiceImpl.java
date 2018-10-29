@@ -24,9 +24,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final Logger log = LoggerFactory.getLogger(EmployeeServiceImpl.class);
 
-    private final EmployeeRepository employeeRepository;
+    private EmployeeRepository employeeRepository;
 
-    private final EmployeeMapper employeeMapper;
+    private EmployeeMapper employeeMapper;
 
     public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper) {
         this.employeeRepository = employeeRepository;
@@ -42,6 +42,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDTO save(EmployeeDTO employeeDTO) {
         log.debug("Request to save Employee : {}", employeeDTO);
+
         Employee employee = employeeMapper.toEntity(employeeDTO);
         employee = employeeRepository.save(employee);
         return employeeMapper.toDto(employee);

@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec } from 'protractor';
+import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { CountryComponentsPage, CountryDeleteDialog, CountryUpdatePage } from './country.page-object';
@@ -38,9 +38,8 @@ describe('Country e2e test', () => {
         const nbButtonsBeforeCreate = await countryComponentsPage.countDeleteButtons();
 
         await countryComponentsPage.clickOnCreateButton();
-        await countryUpdatePage.setCountryNameInput('countryName');
+        await promise.all([countryUpdatePage.setCountryNameInput('countryName'), countryUpdatePage.regionSelectLastOption()]);
         expect(await countryUpdatePage.getCountryNameInput()).to.eq('countryName');
-        await countryUpdatePage.regionSelectLastOption();
         await countryUpdatePage.save();
         expect(await countryUpdatePage.getSaveButton().isPresent()).to.be.false;
 

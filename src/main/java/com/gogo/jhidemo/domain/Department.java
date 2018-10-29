@@ -28,8 +28,7 @@ public class Department implements Serializable {
     @Column(name = "department_name", nullable = false)
     private String departmentName;
 
-    @OneToOne
-    @JoinColumn(unique = true)
+    @OneToOne    @JoinColumn(unique = true)
     private Location location;
 
     /**
@@ -38,7 +37,6 @@ public class Department implements Serializable {
     @ApiModelProperty(value = "A relationship")
     @OneToMany(mappedBy = "department")
     private Set<Employee> employees = new HashSet<>();
-
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;

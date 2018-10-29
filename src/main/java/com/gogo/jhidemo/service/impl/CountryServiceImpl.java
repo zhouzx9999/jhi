@@ -25,9 +25,9 @@ public class CountryServiceImpl implements CountryService {
 
     private final Logger log = LoggerFactory.getLogger(CountryServiceImpl.class);
 
-    private final CountryRepository countryRepository;
+    private CountryRepository countryRepository;
 
-    private final CountryMapper countryMapper;
+    private CountryMapper countryMapper;
 
     public CountryServiceImpl(CountryRepository countryRepository, CountryMapper countryMapper) {
         this.countryRepository = countryRepository;
@@ -43,6 +43,7 @@ public class CountryServiceImpl implements CountryService {
     @Override
     public CountryDTO save(CountryDTO countryDTO) {
         log.debug("Request to save Country : {}", countryDTO);
+
         Country country = countryMapper.toEntity(countryDTO);
         country = countryRepository.save(country);
         return countryMapper.toDto(country);

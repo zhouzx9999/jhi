@@ -14,7 +14,7 @@ import { CountryService } from 'app/entities/country';
     templateUrl: './location-update.component.html'
 })
 export class LocationUpdateComponent implements OnInit {
-    private _location: ILocation;
+    location: ILocation;
     isSaving: boolean;
 
     countries: ICountry[];
@@ -80,12 +80,5 @@ export class LocationUpdateComponent implements OnInit {
 
     trackCountryById(index: number, item: ICountry) {
         return item.id;
-    }
-    get location() {
-        return this._location;
-    }
-
-    set location(location: ILocation) {
-        this._location = location;
     }
 }

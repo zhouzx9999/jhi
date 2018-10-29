@@ -33,7 +33,7 @@ public class EmployeeResource {
 
     private static final String ENTITY_NAME = "employee";
 
-    private final EmployeeService employeeService;
+    private EmployeeService employeeService;
 
     public EmployeeResource(EmployeeService employeeService) {
         this.employeeService = employeeService;
