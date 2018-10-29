@@ -14,7 +14,7 @@ type EntityArrayResponseType = HttpResponse<IZVersion[]>;
 
 @Injectable({ providedIn: 'root' })
 export class ZVersionService {
-    private resourceUrl = SERVER_API_URL + 'api/z-versions';
+    public resourceUrl = SERVER_API_URL + 'api/z-versions';
 
     constructor(private http: HttpClient) {}
 

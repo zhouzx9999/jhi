@@ -25,9 +25,9 @@ public class RegionServiceImpl implements RegionService {
 
     private final Logger log = LoggerFactory.getLogger(RegionServiceImpl.class);
 
-    private final RegionRepository regionRepository;
+    private RegionRepository regionRepository;
 
-    private final RegionMapper regionMapper;
+    private RegionMapper regionMapper;
 
     public RegionServiceImpl(RegionRepository regionRepository, RegionMapper regionMapper) {
         this.regionRepository = regionRepository;
@@ -43,6 +43,7 @@ public class RegionServiceImpl implements RegionService {
     @Override
     public RegionDTO save(RegionDTO regionDTO) {
         log.debug("Request to save Region : {}", regionDTO);
+
         Region region = regionMapper.toEntity(regionDTO);
         region = regionRepository.save(region);
         return regionMapper.toDto(region);

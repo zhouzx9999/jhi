@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec } from 'protractor';
+import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { DepartmentComponentsPage, DepartmentDeleteDialog, DepartmentUpdatePage } from './department.page-object';
@@ -38,9 +38,8 @@ describe('Department e2e test', () => {
         const nbButtonsBeforeCreate = await departmentComponentsPage.countDeleteButtons();
 
         await departmentComponentsPage.clickOnCreateButton();
-        await departmentUpdatePage.setDepartmentNameInput('departmentName');
+        await promise.all([departmentUpdatePage.setDepartmentNameInput('departmentName'), departmentUpdatePage.locationSelectLastOption()]);
         expect(await departmentUpdatePage.getDepartmentNameInput()).to.eq('departmentName');
-        await departmentUpdatePage.locationSelectLastOption();
         await departmentUpdatePage.save();
         expect(await departmentUpdatePage.getSaveButton().isPresent()).to.be.false;
 

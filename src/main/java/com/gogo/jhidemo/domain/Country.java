@@ -22,8 +22,7 @@ public class Country implements Serializable {
     @Column(name = "country_name")
     private String countryName;
 
-    @OneToOne
-    @JoinColumn(unique = true)
+    @OneToOne    @JoinColumn(unique = true)
     private Region region;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

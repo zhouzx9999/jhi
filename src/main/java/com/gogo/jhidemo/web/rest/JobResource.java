@@ -33,7 +33,7 @@ public class JobResource {
 
     private static final String ENTITY_NAME = "job";
 
-    private final JobService jobService;
+    private JobService jobService;
 
     public JobResource(JobService jobService) {
         this.jobService = jobService;

@@ -34,7 +34,7 @@ public class ZEntityResource {
 
     private static final String ENTITY_NAME = "zEntity";
 
-    private final ZEntityService zEntityService;
+    private ZEntityService zEntityService;
 
     public ZEntityResource(ZEntityService zEntityService) {
         this.zEntityService = zEntityService;

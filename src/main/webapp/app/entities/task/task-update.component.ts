@@ -14,7 +14,7 @@ import { JobService } from 'app/entities/job';
     templateUrl: './task-update.component.html'
 })
 export class TaskUpdateComponent implements OnInit {
-    private _task: ITask;
+    task: ITask;
     isSaving: boolean;
 
     jobs: IJob[];
@@ -82,12 +82,5 @@ export class TaskUpdateComponent implements OnInit {
             }
         }
         return option;
-    }
-    get task() {
-        return this._task;
-    }
-
-    set task(task: ITask) {
-        this._task = task;
     }
 }

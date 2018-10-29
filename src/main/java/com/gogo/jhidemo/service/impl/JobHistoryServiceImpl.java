@@ -24,9 +24,9 @@ public class JobHistoryServiceImpl implements JobHistoryService {
 
     private final Logger log = LoggerFactory.getLogger(JobHistoryServiceImpl.class);
 
-    private final JobHistoryRepository jobHistoryRepository;
+    private JobHistoryRepository jobHistoryRepository;
 
-    private final JobHistoryMapper jobHistoryMapper;
+    private JobHistoryMapper jobHistoryMapper;
 
     public JobHistoryServiceImpl(JobHistoryRepository jobHistoryRepository, JobHistoryMapper jobHistoryMapper) {
         this.jobHistoryRepository = jobHistoryRepository;
@@ -42,6 +42,7 @@ public class JobHistoryServiceImpl implements JobHistoryService {
     @Override
     public JobHistoryDTO save(JobHistoryDTO jobHistoryDTO) {
         log.debug("Request to save JobHistory : {}", jobHistoryDTO);
+
         JobHistory jobHistory = jobHistoryMapper.toEntity(jobHistoryDTO);
         jobHistory = jobHistoryRepository.save(jobHistory);
         return jobHistoryMapper.toDto(jobHistory);

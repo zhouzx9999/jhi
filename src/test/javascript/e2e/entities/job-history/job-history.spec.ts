@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec, protractor } from 'protractor';
+import { browser, ExpectedConditions as ec, protractor, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { JobHistoryComponentsPage, JobHistoryDeleteDialog, JobHistoryUpdatePage } from './job-history.page-object';
@@ -38,14 +38,16 @@ describe('JobHistory e2e test', () => {
         const nbButtonsBeforeCreate = await jobHistoryComponentsPage.countDeleteButtons();
 
         await jobHistoryComponentsPage.clickOnCreateButton();
-        await jobHistoryUpdatePage.setStartDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM');
+        await promise.all([
+            jobHistoryUpdatePage.setStartDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
+            jobHistoryUpdatePage.setEndDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
+            jobHistoryUpdatePage.languageSelectLastOption(),
+            jobHistoryUpdatePage.jobSelectLastOption(),
+            jobHistoryUpdatePage.departmentSelectLastOption(),
+            jobHistoryUpdatePage.employeeSelectLastOption()
+        ]);
         expect(await jobHistoryUpdatePage.getStartDateInput()).to.contain('2001-01-01T02:30');
-        await jobHistoryUpdatePage.setEndDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM');
         expect(await jobHistoryUpdatePage.getEndDateInput()).to.contain('2001-01-01T02:30');
-        await jobHistoryUpdatePage.languageSelectLastOption();
-        await jobHistoryUpdatePage.jobSelectLastOption();
-        await jobHistoryUpdatePage.departmentSelectLastOption();
-        await jobHistoryUpdatePage.employeeSelectLastOption();
         await jobHistoryUpdatePage.save();
         expect(await jobHistoryUpdatePage.getSaveButton().isPresent()).to.be.false;
 

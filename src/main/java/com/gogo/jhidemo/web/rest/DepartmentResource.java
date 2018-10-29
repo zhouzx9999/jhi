@@ -29,7 +29,7 @@ public class DepartmentResource {
 
     private static final String ENTITY_NAME = "department";
 
-    private final DepartmentService departmentService;
+    private DepartmentService departmentService;
 
     public DepartmentResource(DepartmentService departmentService) {
         this.departmentService = departmentService;

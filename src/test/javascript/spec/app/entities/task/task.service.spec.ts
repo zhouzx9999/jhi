@@ -1,16 +1,18 @@
 /* tslint:disable max-line-length */
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { of } from 'rxjs';
+import { take, map } from 'rxjs/operators';
 import { TaskService } from 'app/entities/task/task.service';
-import { Task } from 'app/shared/model/task.model';
-import { SERVER_API_URL } from 'app/app.constants';
+import { ITask, Task } from 'app/shared/model/task.model';
 
 describe('Service Tests', () => {
     describe('Task Service', () => {
         let injector: TestBed;
         let service: TaskService;
         let httpMock: HttpTestingController;
-
+        let elemDefault: ITask;
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [HttpClientTestingModule]
@@ -18,73 +20,82 @@ describe('Service Tests', () => {
             injector = getTestBed();
             service = injector.get(TaskService);
             httpMock = injector.get(HttpTestingController);
+
+            elemDefault = new Task(0, 'AAAAAAA', 'AAAAAAA');
         });
 
-        describe('Service methods', () => {
-            it('should call correct URL', () => {
-                service.find(123).subscribe(() => {});
+        describe('Service methods', async () => {
+            it('should find an element', async () => {
+                const returnedFromService = Object.assign({}, elemDefault);
+                service
+                    .find(123)
+                    .pipe(take(1))
+                    .subscribe(resp => expect(resp).toMatchObject({ body: elemDefault }));
 
                 const req = httpMock.expectOne({ method: 'GET' });
-
-                const resourceUrl = SERVER_API_URL + 'api/tasks';
-                expect(req.request.url).toEqual(resourceUrl + '/' + 123);
+                req.flush(JSON.stringify(returnedFromService));
             });
 
-            it('should create a Task', () => {
-                service.create(new Task(null)).subscribe(received => {
-                    expect(received.body.id).toEqual(null);
-                });
-
+            it('should create a Task', async () => {
+                const returnedFromService = Object.assign(
+                    {
+                        id: 0
+                    },
+                    elemDefault
+                );
+                const expected = Object.assign({}, returnedFromService);
+                service
+                    .create(new Task(null))
+                    .pipe(take(1))
+                    .subscribe(resp => expect(resp).toMatchObject({ body: expected }));
                 const req = httpMock.expectOne({ method: 'POST' });
-                req.flush({ id: null });
+                req.flush(JSON.stringify(returnedFromService));
             });
 
-            it('should update a Task', () => {
-                service.update(new Task(123)).subscribe(received => {
-                    expect(received.body.id).toEqual(123);
-                });
+            it('should update a Task', async () => {
+                const returnedFromService = Object.assign(
+                    {
+                        title: 'BBBBBB',
+                        description: 'BBBBBB'
+                    },
+                    elemDefault
+                );
 
+                const expected = Object.assign({}, returnedFromService);
+                service
+                    .update(expected)
+                    .pipe(take(1))
+                    .subscribe(resp => expect(resp).toMatchObject({ body: expected }));
                 const req = httpMock.expectOne({ method: 'PUT' });
-                req.flush({ id: 123 });
+                req.flush(JSON.stringify(returnedFromService));
             });
 
-            it('should return a Task', () => {
-                service.find(123).subscribe(received => {
-                    expect(received.body.id).toEqual(123);
-                });
-
+            it('should return a list of Task', async () => {
+                const returnedFromService = Object.assign(
+                    {
+                        title: 'BBBBBB',
+                        description: 'BBBBBB'
+                    },
+                    elemDefault
+                );
+                const expected = Object.assign({}, returnedFromService);
+                service
+                    .query(expected)
+                    .pipe(
+                        take(1),
+                        map(resp => resp.body)
+                    )
+                    .subscribe(body => expect(body).toContainEqual(expected));
                 const req = httpMock.expectOne({ method: 'GET' });
-                req.flush({ id: 123 });
+                req.flush(JSON.stringify([returnedFromService]));
+                httpMock.verify();
             });
 
-            it('should return a list of Task', () => {
-                service.query(null).subscribe(received => {
-                    expect(received.body[0].id).toEqual(123);
-                });
-
-                const req = httpMock.expectOne({ method: 'GET' });
-                req.flush([new Task(123)]);
-            });
-
-            it('should delete a Task', () => {
-                service.delete(123).subscribe(received => {
-                    expect(received.url).toContain('/' + 123);
-                });
+            it('should delete a Task', async () => {
+                const rxPromise = service.delete(123).subscribe(resp => expect(resp.ok));
 
                 const req = httpMock.expectOne({ method: 'DELETE' });
-                req.flush(null);
-            });
-
-            it('should propagate not found response', () => {
-                service.find(123).subscribe(null, (_error: any) => {
-                    expect(_error.status).toEqual(404);
-                });
-
-                const req = httpMock.expectOne({ method: 'GET' });
-                req.flush('Invalid request parameters', {
-                    status: 404,
-                    statusText: 'Bad Request'
-                });
+                req.flush({ status: 200 });
             });
         });
 

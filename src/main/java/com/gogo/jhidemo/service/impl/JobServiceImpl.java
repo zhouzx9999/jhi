@@ -24,9 +24,9 @@ public class JobServiceImpl implements JobService {
 
     private final Logger log = LoggerFactory.getLogger(JobServiceImpl.class);
 
-    private final JobRepository jobRepository;
+    private JobRepository jobRepository;
 
-    private final JobMapper jobMapper;
+    private JobMapper jobMapper;
 
     public JobServiceImpl(JobRepository jobRepository, JobMapper jobMapper) {
         this.jobRepository = jobRepository;
@@ -42,6 +42,7 @@ public class JobServiceImpl implements JobService {
     @Override
     public JobDTO save(JobDTO jobDTO) {
         log.debug("Request to save Job : {}", jobDTO);
+
         Job job = jobMapper.toEntity(jobDTO);
         job = jobRepository.save(job);
         return jobMapper.toDto(job);

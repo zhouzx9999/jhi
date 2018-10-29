@@ -58,7 +58,6 @@ public class Employee implements Serializable {
 
     @OneToMany(mappedBy = "employee")
     private Set<Job> jobs = new HashSet<>();
-
     @ManyToOne
     @JsonIgnoreProperties("")
     private Employee manager;

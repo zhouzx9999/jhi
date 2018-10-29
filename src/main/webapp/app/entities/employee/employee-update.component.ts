@@ -16,7 +16,7 @@ import { DepartmentService } from 'app/entities/department';
     templateUrl: './employee-update.component.html'
 })
 export class EmployeeUpdateComponent implements OnInit {
-    private _employee: IEmployee;
+    employee: IEmployee;
     isSaving: boolean;
 
     departments: IDepartment[];
@@ -35,6 +35,7 @@ export class EmployeeUpdateComponent implements OnInit {
         this.isSaving = false;
         this.activatedRoute.data.subscribe(({ employee }) => {
             this.employee = employee;
+            this.hireDate = this.employee.hireDate != null ? this.employee.hireDate.format(DATE_TIME_FORMAT) : null;
         });
         this.departmentService.query().subscribe(
             (res: HttpResponse<IDepartment[]>) => {
@@ -56,7 +57,7 @@ export class EmployeeUpdateComponent implements OnInit {
 
     save() {
         this.isSaving = true;
-        this.employee.hireDate = moment(this.hireDate, DATE_TIME_FORMAT);
+        this.employee.hireDate = this.hireDate != null ? moment(this.hireDate, DATE_TIME_FORMAT) : null;
         if (this.employee.id !== undefined) {
             this.subscribeToSaveResponse(this.employeeService.update(this.employee));
         } else {
@@ -87,13 +88,5 @@ export class EmployeeUpdateComponent implements OnInit {
 
     trackEmployeeById(index: number, item: IEmployee) {
         return item.id;
-    }
-    get employee() {
-        return this._employee;
-    }
-
-    set employee(employee: IEmployee) {
-        this._employee = employee;
-        this.hireDate = moment(employee.hireDate).format(DATE_TIME_FORMAT);
     }
 }

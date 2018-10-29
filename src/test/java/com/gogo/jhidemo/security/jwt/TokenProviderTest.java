@@ -2,8 +2,6 @@ package com.gogo.jhidemo.security.jwt;
 
 import com.gogo.jhidemo.security.AuthoritiesConstants;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.security.Key;
 import java.util.*;
 

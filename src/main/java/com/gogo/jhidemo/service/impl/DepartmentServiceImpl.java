@@ -25,9 +25,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     private final Logger log = LoggerFactory.getLogger(DepartmentServiceImpl.class);
 
-    private final DepartmentRepository departmentRepository;
+    private DepartmentRepository departmentRepository;
 
-    private final DepartmentMapper departmentMapper;
+    private DepartmentMapper departmentMapper;
 
     public DepartmentServiceImpl(DepartmentRepository departmentRepository, DepartmentMapper departmentMapper) {
         this.departmentRepository = departmentRepository;
@@ -43,6 +43,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public DepartmentDTO save(DepartmentDTO departmentDTO) {
         log.debug("Request to save Department : {}", departmentDTO);
+
         Department department = departmentMapper.toEntity(departmentDTO);
         department = departmentRepository.save(department);
         return departmentMapper.toDto(department);

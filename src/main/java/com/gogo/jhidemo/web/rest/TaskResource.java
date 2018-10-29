@@ -28,7 +28,7 @@ public class TaskResource {
 
     private static final String ENTITY_NAME = "task";
 
-    private final TaskService taskService;
+    private TaskService taskService;
 
     public TaskResource(TaskService taskService) {
         this.taskService = taskService;

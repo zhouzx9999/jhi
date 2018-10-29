@@ -13,7 +13,7 @@ import { IUser, UserService } from 'app/core';
     templateUrl: './z-entity-update.component.html'
 })
 export class ZEntityUpdateComponent implements OnInit {
-    private _zEntity: IZEntity;
+    zEntity: IZEntity;
     isSaving: boolean;
 
     users: IUser[];
@@ -70,12 +70,5 @@ export class ZEntityUpdateComponent implements OnInit {
 
     trackUserById(index: number, item: IUser) {
         return item.id;
-    }
-    get zEntity() {
-        return this._zEntity;
-    }
-
-    set zEntity(zEntity: IZEntity) {
-        this._zEntity = zEntity;
     }
 }

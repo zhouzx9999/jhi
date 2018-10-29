@@ -32,16 +32,13 @@ public class JobHistory implements Serializable {
     @Column(name = "language")
     private Language language;
 
-    @OneToOne
-    @JoinColumn(unique = true)
+    @OneToOne    @JoinColumn(unique = true)
     private Job job;
 
-    @OneToOne
-    @JoinColumn(unique = true)
+    @OneToOne    @JoinColumn(unique = true)
     private Department department;
 
-    @OneToOne
-    @JoinColumn(unique = true)
+    @OneToOne    @JoinColumn(unique = true)
     private Employee employee;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

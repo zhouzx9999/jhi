@@ -25,9 +25,9 @@ public class LocationServiceImpl implements LocationService {
 
     private final Logger log = LoggerFactory.getLogger(LocationServiceImpl.class);
 
-    private final LocationRepository locationRepository;
+    private LocationRepository locationRepository;
 
-    private final LocationMapper locationMapper;
+    private LocationMapper locationMapper;
 
     public LocationServiceImpl(LocationRepository locationRepository, LocationMapper locationMapper) {
         this.locationRepository = locationRepository;
@@ -43,6 +43,7 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public LocationDTO save(LocationDTO locationDTO) {
         log.debug("Request to save Location : {}", locationDTO);
+
         Location location = locationMapper.toEntity(locationDTO);
         location = locationRepository.save(location);
         return locationMapper.toDto(location);

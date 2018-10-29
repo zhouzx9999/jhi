@@ -11,7 +11,7 @@ type EntityArrayResponseType = HttpResponse<IZEntity[]>;
 
 @Injectable({ providedIn: 'root' })
 export class ZEntityService {
-    private resourceUrl = SERVER_API_URL + 'api/z-entities';
+    public resourceUrl = SERVER_API_URL + 'api/z-entities';
 
     constructor(private http: HttpClient) {}
 
